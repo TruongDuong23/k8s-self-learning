@@ -423,3 +423,124 @@ On the master node, run the following command to generate the join command along
 This command generates a join command with a token that allows worker nodes to join the cluster. It also includes the master node’s IP address.
 
 
+Verify Worker Node Join
+After running the join command on each worker node, switch back to the master node and run the following command to verify that the worker nodes have successfully joined the cluster:
+```Bash
+kubectl get nodes
+```
+This command should list all the nodes in the cluster, including the master node and the newly joined worker nodes. The status of the worker nodes should be “Ready,” indicating that they have successfully joined the cluster and are ready to accept workloads.
+```Bash
+NAME                    STATUS   ROLES           AGE     VERSION
+master.naijalabs.net    Ready    control-plane   60m     v1.29.3
+worker1.naijalabs.net   Ready    <none>          5m16s   v1.29.3
+worker2.naijalabs.net   Ready    <none>          2m40s   v1.29.3
+```
+
+
+### NGINX Test Deployment
+To test your Kubernetes cluster, you can deploy a simple application such as a NGINX web server. Here’s a sample YAML manifest to deploy NGINX as a test deployment:
+```Bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+```
+
+
+### Deploy NGINX
+Save the above YAML to a file named **nginx-deployment.yaml**, then apply it using the **kubectl apply** command:
+```Bash
+kubectl apply -f nginx-deployment.yaml
+```
+```Bash
+deployment.apps/nginx-deployment created
+```
+
+This deployment will create three replicas of NGINX pods in your cluster. Each pod will run an NGINX container exposing port 80. To check the status of your deployment, use the following command:
+```Bash
+kubectl get deployments
+```
+```Bash
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   3/3     3            3           2m40s
+```
+
+To verify that the NGINX pods are running, use:
+```Bash
+kubectl get deployments
+```
+```Bash
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7c79c4bf97-gnbfn   1/1     Running   0          6m6s
+nginx-deployment-7c79c4bf97-tmbpg   1/1     Running   0          6m6s
+nginx-deployment-7c79c4bf97-vgh42   1/1     Running   0          6m6s
+```
+
+
+### Expose NGINX to the external network
+Once the pods are up and running, you can expose the NGINX service to the external network using a Kubernetes Service:
+```Bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+```
+
+Save the above YAML to a file named nginx-service.yaml, then apply it using the kubectl apply command:
+```Bash
+kubectl apply -f nginx-service.yaml
+```
+```Bash
+service/nginx-service created
+```
+
+This will create a Service of type LoadBalancer, which exposes the NGINX deployment to the external network. To get the external IP address of the NGINX service, you can use:
+```Bash
+kubectl get service nginx-service
+```
+
+Once you have the external IP address, navigate to it in a web browser. You should see the default NGINX welcome page, indicating that your Kubernetes cluster is successfully serving web traffic.
+![image](https://github.com/user-attachments/assets/0e97a4a1-5b37-47b5-bfdb-40f61600968e)
+
+### Expose Service Externally: Alternate Methods
+If you cannot use a LoadBalancer service type to expose your application externally and you want to use an IP address within the 192.168.1 subnet for example, there are alternative approaches you can consider. Here are a few options:
+
+| Approach     | Description |
+| ---      | ---       |
+| NodePort Service | Exposes your service on a port across all nodes in the cluster. You can set up port forwarding or NAT on your router to forward traffic from a specific port on your router’s external IP address to the NodePort of your service. |
+| ExternalIPs Field | Specifies a list of external IP addresses in the service manifest. You can configure your router to forward traffic to the desired internal IP address of your cluster node, which has an IP address within the 192.168.1 subnet. |
+| Ingress Controller with NodePort | Deploys an Ingress controller and configures it to use a NodePort service. You can then set up port forwarding or NAT on your router to forward traffic from a specific port on your router’s external IP address to the NodePort of the Ingress controller service. |
+| HostNetwork | Deploys application pods with the hostNetwork: true setting, allowing them to use the host’s network namespace. This binds the application directly to the node’s network interfaces, allowing it to use the node’s IP address. |
+
+Consider your network setup, router capabilities, and security requirements when choosing the appropriate approach. Each option has its pros and cons, so choose the one that best fits your needs and constraints.
+
+
+### Conclusion
+Congratulations! You’ve successfully set up a Kubernetes cluster on Red Hat Enterprise Linux 9 or CentOS 9. With your cluster up and running, you can now begin deploying and managing containerized applications with ease. Remember, Kubernetes is a powerful tool that can streamline your development and deployment workflows, so don’t hesitate to explore its full potential.
+In this guide, we covered the essential steps required to install Kubernetes on RHEL 9 | CentOS 9, but there’s still plenty more to learn. Keep experimenting, stay curious, and never stop exploring the fascinating world of Kubernetes. Happy clustering!
+Did you find this article useful? Your feedback is invaluable to us! Please feel free to share your thoughts in the comments section below.

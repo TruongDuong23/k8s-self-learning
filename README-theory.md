@@ -191,10 +191,49 @@ A solution for this is to place both containers on the same pod.
 
 Having both containers on the same pod allows them to communicate through the loopback interface (ifconfig lo) as if they were two processes running on the same host. They also share the same storage volume.
 
-
-
-
-
+Let us see how a pod can host more than one container. Let’s take a look to the pods02.yaml file. It contains the following lines:
+```Bash
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webserver
+spec:
+  containers:
+  - name: webserver
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+  - name: webwatcher
+    image: afakharany/watcher:latest
+```
+Run the following command:
+```Bash
+$ kubectl apply -f pods02.yaml
+```
+```Bash
+$ kubectl get po -o wide
+NAME        READY   STATUS              RESTARTS   AGE   IP       NODE                                                NOMINATED NODE   READINESS GATES
+webserver   0/2     ContainerCreating   0          13s   <none>   gke-standard-cluster-1-default-pool-78257330-5hs8   <none>           <none>
+```
+```Bash
+$ kubectl get po,svc,deploy
+NAME            READY   STATUS    RESTARTS   AGE
+pod/webserver   2/2     Running   0          3m6s
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.12.0.1    <none>        443/TCP   107m
+```
+```Bash
+$ kubectl get po -o wide
+NAME        READY   STATUS    RESTARTS   AGE     IP         NODE                                                NOMINATED NODE   READINESS GATES
+webserver   2/2     Running   0          3m37s   10.8.0.5   gke-standard-cluster-1-default-pool-78257330-5hs8   <none>           <none>
+```
+### How to verify 2 containers are running inside a Pod?
+```Bash
+$ kubectl apply -f pods02.yaml
+```
+```Bash
+$ kubectl apply -f pods02.yaml
+```
 
 
 

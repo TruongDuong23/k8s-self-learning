@@ -1,4 +1,4 @@
-## Deploying your first Nginx Pod
+## Deploying your first Nginx Pod  - https://collabnix.github.io/kubelabs/pods101/deploy-your-first-nginx-pod.html
 ### K8s Pods?
 - k8s Pods are the foundational unit for all higher k8s objects
 - A pod hosts one or more containers

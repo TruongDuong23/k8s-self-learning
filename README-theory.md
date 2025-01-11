@@ -438,5 +438,9 @@ kubectl apply -f pods105.yaml
 
 
 
+## Exception knowledge
+![image](https://github.com/user-attachments/assets/045884e7-c1a3-4c05-899b-0c7e07a933d6)
+
+
 
 

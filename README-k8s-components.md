@@ -18,4 +18,13 @@ Authorization is implemented using role-based access controls where users are as
 Communication among components is secured using TLS encryption
 
 
-As we know, there are many nodess, virtual,... work with together. Beside,
+As we know, there are many nodess, virtual,components... work with together. Beside, we have:
+* users like administrators that access the cluster  to perform administrative tasks
+* the developers that access the cluster to test or deploy applications
+* end users who access the applications deployed on the cluster
+* Third party applications (Bots) access the cluster for integration purpose
+   
+====> To secure our cluster, by securing the communication between internal components and securing management access to the cluster through authentication and authorization mechanisms
+![image](https://github.com/user-attachments/assets/c679fab7-03e0-486b-afdf-191253346ef9)
+
+

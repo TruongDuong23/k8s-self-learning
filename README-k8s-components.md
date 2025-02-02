@@ -25,6 +25,17 @@ As we know, there are many nodess, virtual,components... work with together. Bes
 * Third party applications (Bots) access the cluster for integration purpose
    
 ====> To secure our cluster, by securing the communication between internal components and securing management access to the cluster through authentication and authorization mechanisms
+
 ![image](https://github.com/user-attachments/assets/c679fab7-03e0-486b-afdf-191253346ef9)
+
+
+Security of end users, who access the applications deployed on the cluster is managed by the applications themselves, internally.  --> out of discuss
+Focus: on users' access to the k8s cluster (admins, usres, bots) for administrative purposes
+
+So we are left with two types of users (users and service account): humans such as the administrators and developers, and robots such as other processes or services or applications that require access to the cluster.
+
+
+
+
 
 

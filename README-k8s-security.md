@@ -89,6 +89,46 @@ Here instead of password, you specify a token. Pass the token file as an option,
 ## TLS Certitficates (PRE_REQ)
 A certificate is used to guarantee trust between two parties during a transaction. For example, when a user tries to access a web server, TLS certificates ensure that the communication between the user and the server is encrypted and the server is who it says it is.
 
+![image](https://github.com/user-attachments/assets/0735dd0e-6188-4d17-8326-5ac14db717e8)
+
+Let's take a look at a scenario.
+
+![image](https://github.com/user-attachments/assets/fac267d8-d109-4a9a-af91-5a8c6bbc624b)
+
+Without secure connectivity, if a user were to access his online banking application, the credentials he types in would be sent in a plain text format. The hacker sniffing network traffic could easily retrieve the credentials and use it to hack into the user's bank account.
+
+![image](https://github.com/user-attachments/assets/1a6f11ce-1970-4780-8225-03a97ea6df9e)
+
+So you must encrypt the data being transferred using encryption keys. The data is encrypted using a key, which is basically a set of random numbers and alphabets.
+
+![image](https://github.com/user-attachments/assets/9bae5779-633a-450c-bf29-95edcde6cc54)
+
+You add the random number to your data and you encrypt it into a format that can not be recognized.
+
+![image](https://github.com/user-attachments/assets/df1bcc49-cbe5-47d6-ba22-6ecd43864e78)
+
+The data is then sent to the server. The hacker sniffing the network gets the data, but can't do anything with it 
+
+![image](https://github.com/user-attachments/assets/5240ea67-a484-4aef-b33d-421efe89c50d)
+
+However, the same is the case with the server receiving the data. It can not decrypt the data without the key, so a copy of the key must also be sent to the server so that the server can decrypt and read the message. Since the key is also sent over the same netwok, the attacker can sniff that as well and decrypt the data with it. This is known as **symmetric encryption**. It is a secure way of encryption, but since it uses the same key to encrypt and decrypt the data, and since the key has to be exchanged between the sender and the receiver, there is a risk of a hacker gaining access to the key and decrypting the data and that's where asymmetric encryption comes in. Instead of using a single key to encrypt and decrypt data, asymmetric encryption uses a pair of keys: a private key and a public key. We'll call it a private key and a public lock.
+
+![image](https://github.com/user-attachments/assets/a6031707-4586-40ba-9a21-1f3fbbf90110)
+
+A key, which is only with me so it's private. A lock that anyone can access, so it's public.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -117,6 +117,8 @@ However, the same is the case with the server receiving the data. It can not dec
 
 A key, which is only with me so it's private. A lock that anyone can access, so it's public.
 
+The trick here is, if you encrypt or lock the data with your lock, you can only open it with the associated key.
+
 
 
 

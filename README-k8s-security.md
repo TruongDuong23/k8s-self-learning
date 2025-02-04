@@ -177,11 +177,34 @@ If hacker tried to get his certificate signed the same way, he will fail during 
 
 How do the browsers know that the CA itself was legimate?  
 - For example, one if the certificate was signed by a fake CA, in this case, our certificate was signed by Symantec. How would the brownser know Symantec is a valid CA and that the certificate was in fact signed by Symantec and not by someone who says they are Symantec?
-- The CAs themselves have a set of public and privet key pairs. The CAs use their private keys to sign the certificates. The public keys of all the CAs are built in to the browsers.
+- The CAs themselves have a set of public and private key pairs. The CAs use their private keys to sign the certificates. The public keys of all the CAs are built in to the browsers. The browser uses the public key of the CA to validate tha the certificate was actually signed by the CA themselves.
 
+You can actually see them in the settings of your web browser under certificates, they're under trusted CAs tab.
 
+![image](https://github.com/user-attachments/assets/f19f23fe-4ad9-4456-9ec5-afe30eb99a63)
 
+That help us ensure the public websites we visit like our banks, emails, et cetera, are legitimate. However, they don't help you validate sites, hosted privately, say within your organization. For example, for accessing your payroll or intenal email applications. For that, you can host your own private CAs. Most of these companies listed here have a private offering of their services, a CA server that you can deploy internally within the company. You can then have the public key of your internal CAs server installed on all your employees browsers and establish secure connectivity within your organization.
 
+![image](https://github.com/user-attachments/assets/648f1c60-e581-41fc-8630-5b6c26c3fa9a)
+
+### TLS-Summary
+An admin uses a pair of keys to secure SSH connectivity to the servers. The server uses a pair of keys to secure a STPS traffic.
+**CERTIFICATE AUTHORITY (CA)**
+the server first sends a certificate signing request to a CA, the CA uses its private key to sign the CSR. (all users have a copy of the CAs public key)
+
+![image](https://github.com/user-attachments/assets/923bc989-4173-4ff8-be00-18b28ff0b643)
+
+The signed certificate is then sent back to the server. The server configures the web application with the signed certificate.
+
+![image](https://github.com/user-attachments/assets/20509eb1-efe2-4aa4-b26e-a68e155780dc)
+
+Whenever a user accesses the web application, the server first sends the certificate with its public key. The user, or rather the user's browser reads the certificate and uses the CAs public key to validate and retrieve the server's public key. It then generates a symmetric key that it wishes to use going forward for all communication.
+
+The certificate authority generates its own set of keeper to sign certificates. The end user though only generates a single symmetric key. Once he establishes trust with the website, he uses his username and password to authenticate to the web server. But the server's keepers, the client was able to validate that the server is who they say they are but the server does not for sure know if the client is who they say they are. It could be a hacker impersonating a user by somehow gaining access to his credentials, not over the network for sure as we have secured it already with TLS, maybe by some other means.
+
+![image](https://github.com/user-attachments/assets/00f92a39-cb0f-4b4b-a50e-e65dc0f3e73d)
+
+## TLS in Kubernetes
 
 
 

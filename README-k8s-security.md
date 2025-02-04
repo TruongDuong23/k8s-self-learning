@@ -189,6 +189,7 @@ That help us ensure the public websites we visit like our banks, emails, et cete
 
 ### TLS-Summary
 An admin uses a pair of keys to secure SSH connectivity to the servers. The server uses a pair of keys to secure a STPS traffic.
+
 **CERTIFICATE AUTHORITY (CA)**
 the server first sends a certificate signing request to a CA, the CA uses its private key to sign the CSR. (all users have a copy of the CAs public key)
 
@@ -204,18 +205,43 @@ The certificate authority generates its own set of keeper to sign certificates. 
 
 ![image](https://github.com/user-attachments/assets/00f92a39-cb0f-4b4b-a50e-e65dc0f3e73d)
 
+
 ## TLS in Kubernetes
 
+![image](https://github.com/user-attachments/assets/e437e6f1-addf-428c-8d25-65d23b61d745)
 
+The Kubernetes cluster consists of a set of master and worker nodes. Of course, all communication between these nodes need to be secure and must be encrypted. All interactions between all services and their clients need to be secure.
 
+![image](https://github.com/user-attachments/assets/03ec3328-ef67-49fb-951d-509539e48954)
 
+### Server Certificates for Servers
+As we know already, the API server exposes an HTTPS service that other components, as well as external users, use to manage the Kubernetes cluster. So it is a server and it requires certificates to secure all communication with its clients. So we generate a certificate and key pair. We call it APIserver.cert and APIserver.key. We will try to stick to this naming convention going forward. Anything with a .CRT extension is the certificate and .key extension is the private key. These certificate names could be different in different Kubernetes setups depending on who and how the cluster was set up.
 
+Another server in the cluster is the etcd server. The etcd server stores all information about the cluster. So it requires a pair of certificate and key for itself. We will call it etcdserver.crt and etcdserver.key.
 
+The other server component in the cluster is on the worker nodes. They are the kubelet services. They also expose an HTTPS API endpoint that the kube-apiserver talks to interact with the worker nodes: kubelet.cert and kubelet.key.
 
+![image](https://github.com/user-attachments/assets/213cdb8f-c397-4c3a-94bf-3bb1abe4f4a5)
 
+### Client Certificates for Clients
+Who are the clients who access these services? Are us, the administrators through kubectl Arrest API. The admin user requires a certificate and key pair to authenticate to the kube-apiserver: admin.crt and admin.key.
 
+The scheduler talks to the kube-apiserver to look for pods that require scheduling and then get the API server to schedule the pods on the right worker nodes. The scheduler is a client that accesses the kube-apiserver. The scheduler is just another client, like the admin user. So the scheduler needs to validate its identity using a clien TLS certificate. So it needs its own pair of certificate and keys: scheduler.cert and scheduler.key.
 
+The kube-controller-manager is another client that accesses the kube-apiserver, so it also requires a certificate for authentication to the kube-apiserver: controller-manager.crt and controller-manager.key
 
+The kube-proxy requires a client certificate to authenticate to the kube-apiserver and so it requires its own pair of certificate and keys: kube-proxy.crt and kube-proxy.key.
+
+![image](https://github.com/user-attachments/assets/30ffec67-60bd-4f51-9485-b81ef8408c29)
+
+So there are many certificates. Let try and group them. 
+
+![image](https://github.com/user-attachments/assets/e45be9d2-7b4c-4ca2-a684-6acecd3dc1fb)
+
+There are a set of client certificates, mostly used by clients to connect to the kube-apiserver and there are s et of server site certificates used by the kube-apiserver, etcd server and kubelet to authenticate their clients.
+
+![image](https://github.com/user-attachments/assets/18d4f8f0-0f53-4259-b2ec-59eb2026c915)
+![image](https://github.com/user-attachments/assets/7ac41f25-9cba-4b92-93d2-16e8c98107d7)
 
 
 

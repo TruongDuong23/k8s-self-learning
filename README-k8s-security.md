@@ -243,6 +243,30 @@ There are a set of client certificates, mostly used by clients to connect to the
 ![image](https://github.com/user-attachments/assets/18d4f8f0-0f53-4259-b2ec-59eb2026c915)
 ![image](https://github.com/user-attachments/assets/7ac41f25-9cba-4b92-93d2-16e8c98107d7)
 
+### Certificate Creation
+To generate certificates, there are different tools available such as EASYRSA, OpenSSL, CFSSL, etc. We will focus OpenSSL
+#### Certificate Authority (CA)
+First, we create a private key using the OpenSSL command (Generate Keys):
+```
+openssl genrsa -out ca.key 2048
+```
+!!! (image)
+Then we use the OpenSSL Request command along with the key we just created to generate a certificate signing request. The certificate signing request is like a certificate with all of your details but with no signature (Certificate signing Request)
+```
+openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
+```
+!!!
+In the certificate signing request we specify the name of the component the certificate is for in the Common Name or CN field. So certificate is named **KUBERNETES-CA**
+
+Finally, we sign the certificate using the **openssl x509** command and by specifying the certificate signing request, we generated in the previous command. Since this is for the CA itself, it is self-signed by the CA using its owning private key that it is generated in the first step.
+```
+openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+```
+!!!
+
+
+
+
 
 
 

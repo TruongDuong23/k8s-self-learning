@@ -175,7 +175,9 @@ You generate a certificate signing a request or CSR (Certificate Signing Request
 
 If hacker tried to get his certificate signed the same way, he will fail during the validation phase and his certificate would be rejected by the CA.
 
-How do the browsers know that the CA itself was legimate?
+How do the browsers know that the CA itself was legimate?  
+- For example, one if the certificate was signed by a fake CA, in this case, our certificate was signed by Symantec. How would the brownser know Symantec is a valid CA and that the certificate was in fact signed by Symantec and not by someone who says they are Symantec?
+- The CAs themselves have a set of public and privet key pairs. The CAs use their private keys to sign the certificates. The public keys of all the CAs are built in to the browsers.
 
 
 

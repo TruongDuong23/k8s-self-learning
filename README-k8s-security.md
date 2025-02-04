@@ -111,13 +111,72 @@ The data is then sent to the server. The hacker sniffing the network gets the da
 
 ![image](https://github.com/user-attachments/assets/5240ea67-a484-4aef-b33d-421efe89c50d)
 
+### Asymmetric encryption
 However, the same is the case with the server receiving the data. It can not decrypt the data without the key, so a copy of the key must also be sent to the server so that the server can decrypt and read the message. Since the key is also sent over the same netwok, the attacker can sniff that as well and decrypt the data with it. This is known as **symmetric encryption**. It is a secure way of encryption, but since it uses the same key to encrypt and decrypt the data, and since the key has to be exchanged between the sender and the receiver, there is a risk of a hacker gaining access to the key and decrypting the data and that's where asymmetric encryption comes in. Instead of using a single key to encrypt and decrypt data, asymmetric encryption uses a pair of keys: a private key and a public key. We'll call it a private key and a public lock.
 
 ![image](https://github.com/user-attachments/assets/a6031707-4586-40ba-9a21-1f3fbbf90110)
 
 A key, which is only with me so it's private. A lock that anyone can access, so it's public.
 
-The trick here is, if you encrypt or lock the data with your lock, you can only open it with the associated key.
+The trick here is, if you encrypt or lock the data with your lock, you can only open it with the associated key. So your key must always be secure with you and not be shared with anyone else, it's private. But the lock is public and maybe shared with others but they can only lock something with it. No matter what is locked using the public lock, it can only be unlocked by your private key.
+
+![image](https://github.com/user-attachments/assets/72fb1213-f33e-4d70-bbde-c6e65be56be3)
+- ID_RSA: the private key (Can be shared openly and is used to encrypt data or verify signatures)
+- ID_RSA.pub: the public key (public lock) (Must be kept secret and is used to decrypt data or create signatures)
+  
+Then secure server by locking down all access to it, except through a door that is locked using your public lock. It's usually done by adding an entry with public key into the server's SSH authorized_keys file
+
+![image](https://github.com/user-attachments/assets/45b891de-b0ae-4074-8bbb-8f746947ff56)
+
+So the lock is public and anyone can attempt to break through. But as long as no one gets their hands on your private key, which is safe with you on your laptop, no one can gain access to the server. When you try to SSH, you specify the location of your private key in your SSH command.
+
+What will you do when you have more than one server with your key pair? You can create copies of your public log and place them on as many servers as you want.
+
+What if other users need access to your servers? They can generate their own public and private key pairs. You can create an additional door for them and lock it with their public locks, copy their public locks to all the servers
+
+![image](https://github.com/user-attachments/assets/dcb137f9-d7e4-4c47-af86-e634b695bb7d)
+
+
+Problem with symmetric encryption: the key used to encrypt data had to be sent to the server over the network along with the encrypted data. So there is a risk of hacker getting the key to decrypt the data.
+
+What if we could somehow get the key to the server safely? To securely transfer the symmetric key from client to the server, we use asymmetric encryption. So we generate a public and private key pair on the server. We're going to refer to the public log as public key going forward.
+
+When the user first accesses the web server using STTPS, he gets the public key from the server. Since the hacker is sniffing all traffic, let us assume he too gets a copy of the public key. 
+
+![image](https://github.com/user-attachments/assets/d2b26084-9884-4456-b89b-cf5786172392)
+
+The user, in fact, the user's browser then encrypts the symmetric key using the public key provided by the server. The symmetric key is now secure
+
+![image](https://github.com/user-attachments/assets/8358ff4f-834b-4fea-927b-1122c4c946b9)
+
+The user then sends this to the server. The hacker also gets a copy. The server uses the private key to decrypt the massage and retrieve the symmetry key from it. However, the hacker does not have the private key to decrypt and retrieve the symmetric key from the massage it received. The hacker only has the public key with which he can only lock or encrypt a message and not decrypt the message. The hacker is left with the encrypted messages and public keys with which he can't decrypt any data.
+
+![image](https://github.com/user-attachments/assets/708bc3b3-4dbc-4947-8a5e-fbb89e56f46c)
+
+The hacker now looks for new ways to hack into your account, and so he realizes that the only way he can get your credential is by getting you to type it into a form he presents. So he creates a website that looks exactly like your bank's website. The design is the same, the graphics are the same, the website is a replica of the actual bank's website. He hosts the website on his own server. So he generates his own set of public and private key pairs and configures them on his web server. And finally, he somehow manages to tweak your environment or your network to route your request going to your bank's website to his servers.
+
+![image](https://github.com/user-attachments/assets/f6c48e90-6975-4718-853b-cf5fe4f9de27)
+
+What if you could look at the key you received from the server and say if it's legitimate key from the real bank server? When the server sends the key, it does not send the key along, it sends a certificate that has the key in it, you will see that it is like an actual certificate but in a digital format. It has information about who the certificate is issued to the public key of that server, the location of that server, et cetera. On the right, you see the output of an actual certificate. Every certificate has a name on it, the person or subject to whom the certificate is issued to that is very important as that is the field that helps you validate their identify. This must match what the user types in the URL on his browser.
+
+![image](https://github.com/user-attachments/assets/b35f290b-2299-452e-8591-78256d9e09fd)
+
+So how do you look at a certificate and verify if it is legit? Who signed and issued the certificate?  If you generated a certificate then you'll have to sign it by yourself. That is known as a self-signed certificate.
+
+How do you create a legitimate certificate for your web servers that the web browsers will trust? How do you get your certificates signed by someone with authority? That's where certificate authorities or CAs comes in. They're well known organizations that can sign and validate your certificates for you. Some of the popular ones are symantec, DigiCert, Comodo, GlobalSign, et cetara.
+
+![image](https://github.com/user-attachments/assets/289e0b1f-89df-43e7-af6a-d753bfa9650f)
+
+You generate a certificate signing a request or CSR (Certificate Signing Request) using the key you generated earlier and the domain name of your website.
+
+![image](https://github.com/user-attachments/assets/e42c3b61-e1d4-42ab-aa5b-b5b3b094d56d)
+- Validate Information
+- Sign and send certificate
+
+If hacker tried to get his certificate signed the same way, he will fail during the validation phase and his certificate would be rejected by the CA.
+
+How do the browsers know that the CA itself was legimate?
+
 
 
 

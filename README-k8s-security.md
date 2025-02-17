@@ -262,7 +262,29 @@ Finally, we sign the certificate using the **openssl x509** command and by speci
 ```
 openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
 ```
-!!!
+
+![image](https://github.com/user-attachments/assets/a5e97341-0a54-4d3f-b9fd-b28ec5336dcb)
+
+![image](https://github.com/user-attachments/assets/08dc009d-2a76-47a8-a094-8ae8e523a8ba)
+
+example:
+![image](https://github.com/user-attachments/assets/914d9872-b951-477c-ac8e-71b396a937b5)
+
+Instead of using user and password then access like Rest API, we can config by yaml file for the certificates to use
+
+![image](https://github.com/user-attachments/assets/02afafc8-3237-4f8b-8bb6-7a5a5e40bf1c)
+
+Remember in the prerequisite lecture we mentioned that for clients to validate the certificates sent by the server and vice versa, they all need a copy of the certificate authorities public certificate. The one that we said is already installed within the user's browsers in case of a web application.
+
+To secure communication between the different members in the cluster, we must generate additional peer certificates. Once the certificates are generated specify them while starting the ETCD server. 
+
+![image](https://github.com/user-attachments/assets/0c85b3ee-1491-4244-9bc1-9de987b4704a)
+
+The kubelets server is an ACTPS API server that runs on each node, responsible for managing the node. That is who the API server talks to monitor the node as well as send information regarding what pods to schedule on this node. Such as, you need a key certificate pair for each node in the cluster.
+
+![image](https://github.com/user-attachments/assets/ea84427f-8a41-46a1-be05-a702b1662d00)
+
+
 
 
 

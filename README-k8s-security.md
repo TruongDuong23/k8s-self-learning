@@ -285,13 +285,37 @@ The kubelets server is an ACTPS API server that runs on each node, responsible f
 ![image](https://github.com/user-attachments/assets/ea84427f-8a41-46a1-be05-a702b1662d00)
 
 
+## View Certificate Details
+There are many different methods to generate and manage certificates. If you were to deploy a k8s cluster from scratch, you generate all the certificates by yourself as above. Or else if you were to rely on an automated provisioning tool like KubeADM, it takes care of automatically generating and configuring the cluster for you. While you deploy all the components as native services on the notes in the hard way, the KubeADM tool deploys these as pods.
+
+![image](https://github.com/user-attachments/assets/81cbc7a3-51c2-4d63-a315-4778f8c52308)
+
+First, look into kube-apiserver anf find more details:
+![image](https://github.com/user-attachments/assets/11a1fd21-34a0-4d8f-8170-7c93a63ab239)
+![image](https://github.com/user-attachments/assets/8880a999-c0af-48e8-a10a-b656a720e47d)
+![image](https://github.com/user-attachments/assets/78de5b3b-8710-4ac6-94b5-b2e005bb8ea6)
+![image](https://github.com/user-attachments/assets/02414ba1-d0d9-4727-a038-28989aefbe4e)
+
+The certificate requirements are listed in detail in the k8s documentation page.
+
+![image](https://github.com/user-attachments/assets/0c4720e6-acd1-4a2b-9fa2-7d69411daf15)
+
+### Inspect Service Logs 
+![image](https://github.com/user-attachments/assets/348fda94-1348-407b-aa6a-bc08ef20f792)
 
 
+### View Logs
+In case you set up the cluster with Kube ADM then the various components are deployed as pods. So you can look at the logs, using the kube-control logs command followed by the pod name.
 
+![image](https://github.com/user-attachments/assets/aff9c148-68eb-4729-9fc3-9439bd6bb18f)
 
+Sometimes if the core components such as the k8s API server or the NCD server are down, the kube-control commands won't function. In that case, you have to go one level down to Docker to fetch the logs. List all the containers using the **docker ps -a** command
 
+![image](https://github.com/user-attachments/assets/c1ca18c6-a0b0-4502-8c96-e97322ce8832)
 
+And then view the logs using the Docker logs command followed by the container ID
 
+![image](https://github.com/user-attachments/assets/43a09c9f-c52f-46d9-8ec9-23ba6864c13b)
 
 
 

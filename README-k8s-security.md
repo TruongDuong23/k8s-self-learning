@@ -285,7 +285,7 @@ The kubelets server is an ACTPS API server that runs on each node, responsible f
 ![image](https://github.com/user-attachments/assets/ea84427f-8a41-46a1-be05-a702b1662d00)
 
 
-## View Certificate Details
+### View Certificate Details
 There are many different methods to generate and manage certificates. If you were to deploy a k8s cluster from scratch, you generate all the certificates by yourself as above. Or else if you were to rely on an automated provisioning tool like KubeADM, it takes care of automatically generating and configuring the cluster for you. While you deploy all the components as native services on the notes in the hard way, the KubeADM tool deploys these as pods.
 
 ![image](https://github.com/user-attachments/assets/81cbc7a3-51c2-4d63-a315-4778f8c52308)
@@ -300,11 +300,11 @@ The certificate requirements are listed in detail in the k8s documentation page.
 
 ![image](https://github.com/user-attachments/assets/0c4720e6-acd1-4a2b-9fa2-7d69411daf15)
 
-### Inspect Service Logs 
+#### Inspect Service Logs 
 ![image](https://github.com/user-attachments/assets/348fda94-1348-407b-aa6a-bc08ef20f792)
 
 
-### View Logs
+#### View Logs
 In case you set up the cluster with Kube ADM then the various components are deployed as pods. So you can look at the logs, using the kube-control logs command followed by the pod name.
 
 ![image](https://github.com/user-attachments/assets/aff9c148-68eb-4729-9fc3-9439bd6bb18f)
@@ -316,6 +316,48 @@ Sometimes if the core components such as the k8s API server or the NCD server ar
 And then view the logs using the Docker logs command followed by the container ID
 
 ![image](https://github.com/user-attachments/assets/43a09c9f-c52f-46d9-8ec9-23ba6864c13b)
+
+### Certificate workflow & API
+We'll look at how to manage certificates and what the certificate API is in k8s.
+
+![image](https://github.com/user-attachments/assets/82785e96-44d5-47a1-b03a-2abaae17fb45)
+
+A user first create a key, then generate a certificate signing request using the key with her name on it, then sends the request to the administrator.
+
+![image](https://github.com/user-attachments/assets/85b64ee7-c8a5-4a40-89c7-0b934c741016)
+
+Takes the key and creates a CertificateSigningRequest object. The CertificateSigningRequest object is created like any other k8s object, using a manifest file with the usual fields. The kind is CertificateSigningRequest. 
+
+The request field is where you specify the certificate signing request sent by the user, but you don't specify it as plaintext. Instead, it must be encoded using the Base64 command. Then move the encoded text into the request field and then submit the request. 
+
+![image](https://github.com/user-attachments/assets/e54c8cce-9bf6-4faf-a871-2ed32e4f3ab2)
+
+Once the object is created, all certificate signing requests can be seen by administrators by running the **kubectl get csr** command. 
+
+![image](https://github.com/user-attachments/assets/6561a3f9-4a9c-48ac-953a-a9f3fd1cad07)
+
+Identify the new request and approve the request by running the **kubectl certificate approve** command.
+
+![image](https://github.com/user-attachments/assets/1893a0e8-6d42-4284-b54c-d70b9dc486a0)
+
+Kubernetes signs the certificate using the CA key pairs and generates a certificate for the user. This certificate can then be extracted and shared with the user. 
+
+View the certificate by viewing it in a YAML format.
+
+![image](https://github.com/user-attachments/assets/c5143300-9c75-45c6-8470-e7fc5279343c)
+
+The generated certificate is part of the output, but as before, it is in a Base64 encoded format. To decoded and use the Base64 utility's decode option. This gives the certificate in a plaintext format. This can be shared with user
+
+![image](https://github.com/user-attachments/assets/0b1226cd-b31f-4081-8271-80ed7d7fb8d3)
+
+All the certificate-related operations are carried out by the controller-manager.
+
+![image](https://github.com/user-attachments/assets/9e49d460-bcb6-49e9-a399-72edfce2c535)
+![image](https://github.com/user-attachments/assets/8ac913e3-ff2a-46c7-b0fc-5f44a480c83a)
+
+If anyone has to sign certificates, they need the CA server's root certificate and private key. The Controller-manager service configuration has 2 options where you can specify these.
+
+![image](https://github.com/user-attachments/assets/d1d79e54-e945-43d5-a998-0827d10732ea)
 
 
 

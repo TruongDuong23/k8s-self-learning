@@ -392,7 +392,7 @@ It lists the cluster's contexts and users, as well as the current context that i
 
 ![image](https://github.com/user-attachments/assets/d429034b-4f81-40e0-a741-4f4f8e0f5f8e)
 
-Run the kubectl config use context command to change the current context to the prod user at production context.
+Run the kubectl config use context command to change the current context to the prod user at production context. And you also need to point to existed context like **kubectl config use-context research --kubeconfig /root/my-kube-config**
 
 ![image](https://github.com/user-attachments/assets/b62a83c9-6936-411a-ad2d-13c51869ed4a)
 

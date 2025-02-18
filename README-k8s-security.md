@@ -360,6 +360,57 @@ If anyone has to sign certificates, they need the CA server's root certificate a
 ![image](https://github.com/user-attachments/assets/d1d79e54-e945-43d5-a998-0827d10732ea)
 
 
+## KubeConfig
+![image](https://github.com/user-attachments/assets/8da86e3f-f8d6-4c9a-a63a-31ac91c4abe7)
+
+You can move information to a configuration file called as kubeconfig and then specify this file as the kubeconfig option in your command. 
+
+![image](https://github.com/user-attachments/assets/b68ce76a-c855-4a10-9336-fb5304629257)
+
+By default, the kubectl tool looks for a file named config under a directory .kube under the user's home directory: **$HOME/.kube/config**
+
+### KubeConfig File
+![image](https://github.com/user-attachments/assets/45193ed7-7a35-4d48-a6b8-c69184b7d045)
+![image](https://github.com/user-attachments/assets/c9cf5453-ff53-4005-87a7-f0ea8e1bb7f2)
+
+The server specification in our command goes into cluster section (MyKubePlayground). The admin user's keys and certificates goes into user section (MyKubeAdmin). You then create a context that specifies to use the MyKubeAdmin user to access the MyKubePlayground cluster
+
+![image](https://github.com/user-attachments/assets/880f3fc8-2e7f-4466-87f5-b14f477ef12a)
+
+The kubeconfig file is in a YAML format. 
+
+![image](https://github.com/user-attachments/assets/8b3cd649-a3c8-458c-98a2-c3f028b63476)
+![image](https://github.com/user-attachments/assets/12b27293-c4ff-47ee-bf5a-3b2891e91fa6)
+
+You can specify the default context used by adding a field current context to the kubeconfig file, specify the name of the context to use. In this case, kubectl will always use the context dev user at Google to access the Google clusters using the dev user's credentials.
+
+To view the current file being used, run the kubectl config view command. 
+
+![image](https://github.com/user-attachments/assets/93e0729d-b96f-4a41-ae22-d9207dd6fe09)
+
+It lists the cluster's contexts and users, as well as the current context that is set. If you do not specify which kubeconfig file to use, it ends up using the default file located in the folder .kube in the user's home directory. Alternatively, you can specify a kubeconfig file by passing the kubeconfig option in the command line like this.
+
+![image](https://github.com/user-attachments/assets/d429034b-4f81-40e0-a741-4f4f8e0f5f8e)
+
+Run the kubectl config use context command to change the current context to the prod user at production context.
+
+![image](https://github.com/user-attachments/assets/b62a83c9-6936-411a-ad2d-13c51869ed4a)
+
+You can make other changes in the file, update or delete items in it using other variations of the kubectl config command. 
+
+![image](https://github.com/user-attachments/assets/35bac44b-8063-4b67-98c5-a4a21fe780e6)
+
+### Certificates in KubeConfig
+![image](https://github.com/user-attachments/assets/ff511982-fb11-4ac0-b566-bd228999a58f)
+![image](https://github.com/user-attachments/assets/1b0f5af3-b374-4f6d-bfb1-94aa32f92c27)
+
+
+
+
+
+
+
+
 
 
 

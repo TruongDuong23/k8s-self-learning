@@ -491,6 +491,42 @@ The modes are set using the Authorization Mode Option on the Kube API Server. If
 ![image](https://github.com/user-attachments/assets/9293bfb2-68a9-4f93-8ee9-364a097905db)
 
 ### Role Based Access Controls - RBAC
+So how do we create a role? We do that by creating a role object. So we create a role definition file with the API version set to **rbac.authorization.k8s.io/v1**.
+
+![image](https://github.com/user-attachments/assets/b922e5ca-b5fd-44e1-85a1-c576fec79982)
+
+The next step is to link the user to that role. The roll binding object links a user object to a role.
+
+![image](https://github.com/user-attachments/assets/c5dc718c-b788-40fa-9273-6dcc41f1e17f)
+
+If you want to limit the dev user's access within a different namespace then specify the namespace within the metadata of the definition file while creating them. 
+
+#### View RBAC
+To view creating role
+
+![image](https://github.com/user-attachments/assets/ab28d6d2-4e55-4972-accf-1af660dcf2ba)
+
+To list role bindings
+
+![image](https://github.com/user-attachments/assets/26c6ab52-d049-435e-bf63-ec1e8f8b2161)
+
+To view more details about the role
+
+![image](https://github.com/user-attachments/assets/4e811409-0b57-4c35-808f-b9b62eba4677)
+
+Similarly, to view details about rule bindings 
+
+![image](https://github.com/user-attachments/assets/710025e7-9e4e-41a3-9bde-137efc3b654a)
+
+#### Check Access
+
+![image](https://github.com/user-attachments/assets/4f5241df-e722-41f8-8a7c-ae0600b9ddf1)
+
+If you're an administrator, then you can even impersonate another user to check their permission.
+
+For instance, you were tasked to create necessary set of permissions for user to perform a set of operations for a user to perform a set of operations and you did that, but you would like to test if what you dis is working. You don't have to authenticate as the user to test it. Instead, you can use the same command with the AS user.
+
+![image](https://github.com/user-attachments/assets/8d498b1e-bc69-44d1-b5d8-2045a676e6f3)
 
 
 

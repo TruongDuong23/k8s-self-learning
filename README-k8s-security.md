@@ -524,18 +524,21 @@ Similarly, to view details about rule bindings
 
 If you're an administrator, then you can even impersonate another user to check their permission.
 
-For instance, you were tasked to create necessary set of permissions for user to perform a set of operations for a user to perform a set of operations and you did that, but you would like to test if what you dis is working. You don't have to authenticate as the user to test it. Instead, you can use the same command with the AS user.
+For instance, you were tasked to create necessary set of permissions for user to perform a set of operations for a user to perform a set of operations and you did that, but you would like to test if what you dis is working. You don't have to authenticate as the user to test it. Instead, you can use the same command with the AS user. Since we did not grant the deeloper permissions to create deployments, it returns no. The dev user has access to vreating pods through.
 
 ![image](https://github.com/user-attachments/assets/8d498b1e-bc69-44d1-b5d8-2045a676e6f3)
 
+You can also specify the namespace in the command , the dev does not have permission to create a pod in the test namespace
 
+![image](https://github.com/user-attachments/assets/ed54d917-e367-4024-ae94-4df3159652ea)
 
+### Resource Names
 
+![image](https://github.com/user-attachments/assets/0a5bbfca-8e10-4122-bdfd-3fa154a185b9)
 
+We just saw how you can provide access to users for resource like pods within the namespace. For example, say you have 5 parts in namespace, you wanna give access to a user to pods, but not all pods. You can restrict access to the blue and orange pod alone by adding a **resourcenames** field to the rule.
 
-
-
-
+![image](https://github.com/user-attachments/assets/2b221710-53d0-48ac-a1ae-730519c5251b)
 
 
 

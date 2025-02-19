@@ -404,6 +404,100 @@ You can make other changes in the file, update or delete items in it using other
 ![image](https://github.com/user-attachments/assets/ff511982-fb11-4ac0-b566-bd228999a58f)
 ![image](https://github.com/user-attachments/assets/1b0f5af3-b374-4f6d-bfb1-94aa32f92c27)
 
+## API Groups
+The Kubernetes API is grouped into multiple such groups based on their purpose, such as: 
+
+![image](https://github.com/user-attachments/assets/16e8172f-7e69-4383-b8b2-c326d3d1f37a)
+
+The metrics and health API are used to monitor the health of the cluster. The logs are used for integrating with third-party logging applications. We focus on apis, responsible for the cluster functionality.
+
+![image](https://github.com/user-attachments/assets/ac638ef5-b5cb-489f-8a90-c24538c132b7)
+
+The core group is where all core functionality exists, such as name, spaces, pods,..
+
+![image](https://github.com/user-attachments/assets/c5c74742-f0a2-4a04-9c79-78fb4e1d0146)
+
+The named group APIs are more organized and going forward, all the newer features are going to be made available through these named groups.
+
+![image](https://github.com/user-attachments/assets/f4548119-91d7-446e-b715-d4f905b583a1)
+
+Access your Kube API Server at port 6443 without any path and it will list you the available API groups. 
+
+![image](https://github.com/user-attachments/assets/a45e2818-f692-41a9-8630-3f2725d7ec80)
+
+And then, within the named API groups, it returns all the supported resource groups.
+
+![image](https://github.com/user-attachments/assets/ca3894a3-4f71-49c8-bb87-c210caedf1b4)
+
+If you were to access the API directly through curl, then you will not be allowed access except for certain APIs like version, as you have not specified any authentication mechanisms. So you have to authenticate to the API using your certificate files by passing them
+
+![image](https://github.com/user-attachments/assets/70ae3a7f-21e6-4028-a653-0217c0182198)
+
+### kubectl proxy
+An alternate option is to start a Kube control proxy client. The kube control proxy command launches a proxy service locally on port 8001 and uses credentials and certificates from your kube config file to access the cluster. That way, you don't have to specify those in the curl command.
+
+![image](https://github.com/user-attachments/assets/5cb10be7-02cd-4ade-9660-853634d4532a)
+
+Here are two terms that kind of sound the same: The Kube proxy and Kube control proxy.
+
+![image](https://github.com/user-attachments/assets/0319c8f0-283e-4529-8987-87356fbf4daf)
+
+- The kube proxy is used to enable connectivity between pods and services across different nodes in the cluster. 
+- The kube control proxy is an ACTP proxy service created by kube control utility to access the kube API server.
+
+## Authorization
+First of all, why do you need authorization in your cluster? 
+
+As an administrator of the cluster, we were able to perform all sorts of operations in it, such as viewing various objects like pods, nodes,... As an admin, we are able to perform any operation but soon we will have others accessing the cluster as well such as the pther administrators, developers, testers or other applications like monitoring applications or continuous delivery applications like Jenkins, et cetera. So we will be creating accounts for them to access the cluster by creating usernames and passwords or tokens, or signed TL certificates or service accounts. But we don't want all of them to have the same level of access as us. 
+
+For example, we don't want the developers to have access to modify our cluster configuration, like add or del nodes or the storage or networking configurations. We can allow them to view but not modify, but they could have access to deploying applications.
+
+![image](https://github.com/user-attachments/assets/d8a4e20d-a5d2-4bd1-bb95-6ed2c80a53bb)
+
+When we share our cluster between different organizations or teams, by logically partitioning it using namespaces, we want to restrict access to the users to their namespaces alone. 
+
+### Authorization Mechanisms 
+#### Node 
+Kube API Server is accessed by users for management purposes, as well as the kubelets on node within the cluster for management process. The kubelet accesses the API server to read information about services and points, nodes and pods. The kubelet also reports to the Kube API Server with information about the node, such as it's status.
+
+![image](https://github.com/user-attachments/assets/471f6c0d-b2bd-43c0-bfe5-e915c3b871f3)
+
+#### ABAC
+External access to the API. Attribute-based authorization is where you associate a user or a group of users with a set of permissions. In this case, dev user can view, create and delete pods. You do this by creating a policy file with a set of policies defined in adjacent format, this way you pass this file into the API server. 
+
+![image](https://github.com/user-attachments/assets/13f94c65-b10a-48cf-8317-c7a7248bcf78)
+
+Everytime you need to add or make a change in the security, you must edit this policy file manually and restart the Kube API Server.
+
+![image](https://github.com/user-attachments/assets/6dad35f8-7a47-4eda-8ba8-116604ee7ff8)
+
+#### Webhook
+You want to manage authorization externally and not through the built-in mechanisms that we just discussed. 
+
+For instance, Open Policy Agent is a third-party tool that helps with admission control and authorization. You have Kubernetes make an API call to the OPA with the information about the user and his access requirements, and have the OPA decide if the user should be permitted or not. Based on that response, the user is granted access.
+
+![image](https://github.com/user-attachments/assets/fc3f6602-f9f8-4e9a-a221-869de87e2801)
+
+#### Authorization Mode
+2 more modes: Allways Allow and Always Deny.
+- Always Allow: allows all requests without performing any authorization checks.
+- Always Deny: deny all requests.
+
+![image](https://github.com/user-attachments/assets/97fe9fae-94df-465d-a462-72ff5b6d737f)
+
+The modes are set using the Authorization Mode Option on the Kube API Server. If you don't specify this option, it is set **Always Allow** by default. you may provide a comma separated list of multiple modes that you wish to use. 
+
+![image](https://github.com/user-attachments/assets/13e64636-e4cd-495c-b63b-7989ddb09c0b)
+![image](https://github.com/user-attachments/assets/9293bfb2-68a9-4f93-8ee9-364a097905db)
+
+### Role Based Access Controls - RBAC
+
+
+
+
+
+
+
 
 
 

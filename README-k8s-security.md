@@ -541,6 +541,68 @@ We just saw how you can provide access to users for resource like pods within th
 ![image](https://github.com/user-attachments/assets/2b221710-53d0-48ac-a1ae-730519c5251b)
 
 
+## Cluster Roles and Role Bindings
+### Roles
+
+![image](https://github.com/user-attachments/assets/3cc8b5e4-0933-40b8-8c43-1a434758e72c)
+
+### Namespace
+Cluster-wide or cluster-scoped resources. They can't be associated to any particular namespace. So the resources are categorized as either namespaced or cluster-scoped.
+
+![image](https://github.com/user-attachments/assets/24e1897e-0fe6-4d90-a30c-68103173a41f)
+
+How to authorize a user to namespace resources, we used roles and role bindings for that. But how do we authorize users to cluster-wide resources like nodes or persistent volumes.That is where you use cluster roles and cluster rolebindings.
+
+### Cluster roles
+are just like roles, except they are for cluster-scoped resources. For example, a cluster admin role can be created to provide a cluster administrator permissions to view, create, or delete nodes in a cluster. Similarly, a storage administrator role can be created to authorize a storage admin to create persistent volumes and claims. Create a cluster role definition file.
+
+![image](https://github.com/user-attachments/assets/8b102207-1e52-4ac3-8916-21206e6d67a5)
+
+
+## Service Accounts
+There are two types of accounts in Kubernetes, a user account and a service account.
+- The user account is used by humans. A user account could be for an administrator accessing the cluster to perform administrative tasks, or a developer accessing the cluster to deploy applications, et cetera. 
+- The service accounts are used by machines. A service account could be an account used by an application to interact with the Kubernetes cluster.
+
+To create a service account, run command
+
+![image](https://github.com/user-attachments/assets/3c4d5b1e-3ada-47dc-b429-d3722d8ea15e)
+
+To view the serivce accounts, run command will list all the service accounts.
+
+![image](https://github.com/user-attachments/assets/df33bc9c-0e66-464f-b8dc-2733c4c8081a)
+
+When the service account is created, it also creates a token automatically. The service account token is waht must be used by the external application while authenticating to the Kubernetes API. The token, however, is stored as a secret object. 
+
+![image](https://github.com/user-attachments/assets/96bb9919-3dbf-46a1-8ee0-d5484bd4fc04)
+
+When a service account is created, it first creates the service account object, and then generates a token for the service account. It then creates a secret object ans stores that token inside the secret object. the secret object is then linked to the service account. To view the token, view the secret object by running command **kubectl describe secret**
+
+![image](https://github.com/user-attachments/assets/f2d1436b-d02e-424d-b16e-058ad6bebef4)
+
+This token can be used as an authentication bearer token while making a risk call to the Kubernetes API.
+
+You can create a service account, assign the right permissions using role-based access control mechanisms, and export your service account tokens, and use it to configure your third-party application to authenticate to the Kubernetes API. 
+
+![image](https://github.com/user-attachments/assets/da4661a5-9a0a-4ec7-b12a-03af29efcf97)
+
+![image](https://github.com/user-attachments/assets/f91cef08-5433-4ce3-9247-d7302fbde921)
+
+From inside the pod, if you run ls command to list the contents of the directory, you will see the secret mounted as three separate files. The one with the  actual token is the file's named token. 
+
+![image](https://github.com/user-attachments/assets/3725e51b-aaab-4bca-b061-eb8c5ffa5e2b)
+
+If you view contents of that file, you will see the token to be used for accessing the Kubernetes APi.
+
+![image](https://github.com/user-attachments/assets/04108bf7-3db1-4ad4-bc5c-a2f46e4228c7)
+
+
+
+
+
+
+
+
 
 
 

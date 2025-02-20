@@ -586,6 +586,10 @@ You can create a service account, assign the right permissions using role-based 
 
 ![image](https://github.com/user-attachments/assets/da4661a5-9a0a-4ec7-b12a-03af29efcf97)
 
+You don't have to provide it manually. If you go back and look at the list of service accounts, you will see that there is a default service account that exists already. For every namespace in Kubernetes, a service account named default is automatically created. Each namespace has its own default service account. Whenever a pod is created, the default service account and it's token are automatically mounted to that pod as a volume mount.
+
+You will see that a volume is automatically created from the secret named default token, which is in fact the secret containing the token for this default service account. The secret token containing the token for this default service account. The secret token is mounted at location **/var/run/secrets/kubernetes.io/serviceaccount** inside the pod.
+
 ![image](https://github.com/user-attachments/assets/f91cef08-5433-4ce3-9247-d7302fbde921)
 
 From inside the pod, if you run ls command to list the contents of the directory, you will see the secret mounted as three separate files. The one with the  actual token is the file's named token. 
@@ -595,6 +599,22 @@ From inside the pod, if you run ls command to list the contents of the directory
 If you view contents of that file, you will see the token to be used for accessing the Kubernetes APi.
 
 ![image](https://github.com/user-attachments/assets/04108bf7-3db1-4ad4-bc5c-a2f46e4228c7)
+
+Remember that the default service account is very much restricted. It only has permission to run basic Kubernetes API queries. If you'd like to use a different service account such as the one we just created, modify the pod definition file to include a service account field to include a service account field and specify the name of the new service account. Remember you can not edit the SA of an existing pod. You must delete and recreate the pod.
+
+However, in case of deployment, you will able to edit the SA as any changes to the pod definition file, will automatically trigger a new rollout for the deployment.
+
+![image](https://github.com/user-attachments/assets/e72b1c8f-9ec4-4f1f-a422-2922dbb270bc)
+
+Kubernetes automatically mounts the default service account if you haven't explicitly specified any. You may choose not to mouunt a service account automatically by setting the **automountServiceAccountToken: false** field in the pod spec section.
+
+Take the token and if you decode the token using command
+
+![image](https://github.com/user-attachments/assets/1667ee04-61b5-48a3-b778-0f99ffe39c7d)
+
+Or you could just copy and paste this token in the JWT website at jwt.io, you will see that it has no expiry date defined in the payload section here on the right.
+
+![image](https://github.com/user-attachments/assets/a43788af-c3d0-4663-bbef-29483a637d0d)
 
 
 

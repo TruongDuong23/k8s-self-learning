@@ -641,12 +641,36 @@ We first create a secret object with the credentials in it. The secret is of typ
 ![image](https://github.com/user-attachments/assets/4944f487-3983-410f-a442-d61c77ffd50d)
 
 
+## Security Context 
+### Docker Security
 
+![image](https://github.com/user-attachments/assets/94be2b2b-1f67-4db8-9b24-23d02794312b)
 
+### Linux Capabilities
+The root user can literally do anything, and so does a process run by the root user. It has unrestricted access to the system, from modifying files and permissions on files, access control, creating or killing processes, setting group ID or user ID, performing network-related operations, such as binding 2 network ports, broadcasting on a network, controlling network ports; system-related operations, like rebooting the host, manipulating system clock,... 
 
+![image](https://github.com/user-attachments/assets/3586e296-3cf8-4e5d-9f05-8d06b929e384)
 
+Chang status capabilities
 
+![image](https://github.com/user-attachments/assets/9ebb363a-37b2-45f3-87e7-fb04031bcda2)
 
+### Container Security 
+
+![image](https://github.com/user-attachments/assets/fe0bf9ff-3654-47b5-92d7-63b7533d4275)
+
+### Kubernetes Security
+Containers are encapsulated in pods. You may choose to configure the security settings at a container level or at a pod level. If you configure it at both the pod and the container, the settings on the container will override the settings on the pod.
+
+![image](https://github.com/user-attachments/assets/9b00ded3-2851-4aa8-82c7-7c8d56db4dca)
+
+### Security Context
+
+![image](https://github.com/user-attachments/assets/f560ad50-deb4-4fbb-8c99-ef6b173ad87a)
+
+Move the whole section under the container specification to add capabilities. Use the capabilities option and specify a list of capabilities to add to the pod.
+
+![image](https://github.com/user-attachments/assets/42bd4d96-d66b-44dc-b009-6e8f71b8b0fb)
 
 
 

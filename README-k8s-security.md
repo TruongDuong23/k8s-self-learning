@@ -617,6 +617,33 @@ Or you could just copy and paste this token in the JWT website at jwt.io, you wi
 ![image](https://github.com/user-attachments/assets/a43788af-c3d0-4663-bbef-29483a637d0d)
 
 
+## Image Security
+### Image
+
+![image](https://github.com/user-attachments/assets/50fef435-5bc5-4aa1-aa29-21dbf314eff8)
+
+- The Nginx image to deploy an Nginx container. 
+- This name follows Docker's image naming convention. Nginx here is the image or the repository name.
+- It's actually library / Nginx. "library" stands for the user or the account name. So if you don't provide a user or account name, it assumes it to be library. Library is the name of the default account where Docker's official images are stored.
+- Instead of library, it would be your name or your company's name. It's assumed to be Docker's default registry, Docker hub.
+- The DNS name for which is docker.io
+- The registry is where all the images are stored. Whenever you create a new image or update an image, you push it to the registry and everytime anyone deploys this application, it's pulled from the registry.
+
+### Private repository
+You may choose to make a repository private so that it can be accessed using a set of credentials.
+
+From Docker's perspective, to run a container using a private image, you first log into your private registry using Docker login command, input your credentials.
+
+![image](https://github.com/user-attachments/assets/86f78390-66fd-4221-8ad0-40a28f7ef2f8)
+
+We first create a secret object with the credentials in it. The secret is of type docker registry and we name it regcred. Docker registry is built in secret  type that was built for storing Docker credentials. We specify the secret inside our pod definition file under the image pull secret section. 
+
+![image](https://github.com/user-attachments/assets/4944f487-3983-410f-a442-d61c77ffd50d)
+
+
+
+
+
 
 
 

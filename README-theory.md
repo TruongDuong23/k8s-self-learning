@@ -442,5 +442,25 @@ kubectl apply -f pods105.yaml
 ![image](https://github.com/user-attachments/assets/045884e7-c1a3-4c05-899b-0c7e07a933d6)
 
 
+# Note:
+##JSON PATH in Kubectl:
+
+![image](https://github.com/user-attachments/assets/2e3a949d-d669-4d0d-9ad6-45d3219e1bf7)
+
+##JSON PATH for Sort
+
+![image](https://github.com/user-attachments/assets/cad66b70-d725-41f5-8b24-5362823aa1ef)
+
+
+
+
+
+
+
+
+
+
+
+
 
 

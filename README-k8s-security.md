@@ -673,6 +673,94 @@ Move the whole section under the container specification to add capabilities. Us
 ![image](https://github.com/user-attachments/assets/42bd4d96-d66b-44dc-b009-6e8f71b8b0fb)
 
 
+## Network Policies
+### Traffic
+
+![image](https://github.com/user-attachments/assets/eee76f54-fcfa-455c-9328-1f429fa0921d)
+
+If we were to list the rules required to get this working, we would have an ingress rule that us required to accept HTTP traffic on port 80 on the web server, an engress rule to allow traffic from the web server to port 5000 on the API server, .....
+
+![image](https://github.com/user-attachments/assets/c00eb5f9-42de-46a7-87e2-f8a6c49d0a8a)
+
+So that is the basic of traffic flow and rules.
+
+### Ingress and Egress
+
+There are 2 types of traffic: ingress and egress. The incoming trafic from the users is an ingress traffic and the outgoing request to the app server is egress traffic. And that is denoted by the straight arrow. When you define ingress and egress, remember you're only looking at the direction in which the traffic originated. The response back to the user denoted by the dotted lines do not really matter.
+
+![image](https://github.com/user-attachments/assets/f66fa11f-c783-4303-a479-fce795aea13c)
+
+### Network Security
+
+![image](https://github.com/user-attachments/assets/a8a45805-f321-495f-915e-71a7bc122039)
+
+This is a set of node, each node has pods and serices. Each node has IP address and so doeas each pod as well as wervice. One of the prerequisite for networking in Kubernetes is whatever solution you implement, the pods should be able to communicate with each other without having to configure any additional settings like routes. 
+
+![image](https://github.com/user-attachments/assets/782da3f1-23ff-432b-a8c2-660cc4e14f07)
+
+Kubernetes is configured by default with an all allow rule that allows traffic from any pod to any other pod or services within the cluster.
+
+For each component in the application, we deploy a pod. One for the front-end web server, for the API server and one for the DB. We create services to enable communication between them as well as to the end user.
+
+![image](https://github.com/user-attachments/assets/35551f69-e4f8-4067-9d14-ce45e1b97c57)
+
+If we do not want the front end web server to be able to communicate with db server directly.
+
+Network policy is another object in the Kubernetes namespace just like pods, replicasets or services, you link a network policy to one or more pods. You can define rules within the network policy.
+
+![image](https://github.com/user-attachments/assets/369f12f6-22c7-4d2e-a454-95a2cbc160fd)
+
+![image](https://github.com/user-attachments/assets/aef84a12-5be8-4e57-b699-ebb49d80163e)
+
+
+### Netwwork Policy - Selectors
+
+![image](https://github.com/user-attachments/assets/71f24ea7-7272-485d-893b-61a047fd7e7f)
+
+Under policy types, specify whether the rule is to allow ingress or egress traffic or both.
+
+![image](https://github.com/user-attachments/assets/6dec4fce-a474-458d-934c-df3422647367)
+
+### Network Policy - Rules
+we specify the ingress rule. That allows traffic from the API pod and you specify the API pod again using labels and selectors.
+
+![image](https://github.com/user-attachments/assets/b3574f41-33dd-4aec-a8a2-fd009fb1b719)
+
+### Network Policy
+
+![image](https://github.com/user-attachments/assets/19f6865d-6ba8-45d3-a822-8867e7c55425)
+
+Ingress or egress isolation only comes into effect if you have ingress or egress in the policy types. In this example, policyTypes whichs means only ingress traffic is isolated and all egress traffic is unaffected. Meaning the pod is able to make any egress calls and they're not blocked. 
+
+### Note
+Remember that network policies are forced by the network solution implemented on Kubernetes cluster and not all network solutions support network policies.
+
+![image](https://github.com/user-attachments/assets/48109ac8-d1ad-4b2c-ad5b-54604fee4b77) 
+If you use Flannel as the networking solution, it does not support network policies. Always referred to the Network Solutions Documentation to see support for network policies. Even in a cluster configured with a solution that does not support network policies, you can still create the policies but they will just not be enforced. You will not get an error message saying the network solution does not support network policies. 
+
+
+## Developing network policies
+
+![image](https://github.com/user-attachments/assets/a686366f-86ac-4ffb-8cb8-3300c8fb2737)
+
+Our goal is to protect the db pod so that it does not allow access from any other pod except the API pod and only on port 3306.
+
+We want to block out everything going in and out of the db pod except API pod
+
+![image](https://github.com/user-attachments/assets/91ae7044-308c-4fb5-8640-909f5ffe8e4f)
+
+What if there are multiple API pods in the cluster with the same labels but in different namespaces?
+
+![image](https://github.com/user-attachments/assets/6839f042-ba38-464b-867c-8e0ca8fe07d4)
+
+If we have a backup server somewhere outside of the Kubernetes cluster and we want to allow this server to connect to the db port. Now since this backup server is not deployed in our Kubernetes cluster, the pod selector and namespace selector fields that we use to define traffic from won't work because it's not a pod in the cluster.
+
+![image](https://github.com/user-attachments/assets/645d9f9d-6815-48af-8cd6-3cc01ab30f20)
+
+We can also do this with egress
+
+![image](https://github.com/user-attachments/assets/44923a85-d099-40d7-9168-1355401c5d66)
+
 
 
 

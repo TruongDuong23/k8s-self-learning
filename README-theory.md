@@ -472,6 +472,27 @@ The releases are installed, the charts used, revision states and so on, Helm wil
 
 ![image](https://github.com/user-attachments/assets/87f6f50e-fd6d-4f94-af69-c6ff5f47f9c6)
 
+As far as the human operators are concerned, charts are just a bunch of text files. Each specific file named in a sepcific way has a well-defined purpose. 
+
+![image](https://github.com/user-attachments/assets/94da35f5-0533-4cab-a571-fb45f8d715df)
+
+Example chart.yaml
+
+![image](https://github.com/user-attachments/assets/56c537a7-7c70-4424-866d-9638b58b4d6d)
+
+![image](https://github.com/user-attachments/assets/7b9614b2-7db9-435d-b349-d3421dcb0b06)
+
+The app version is a version of the application that is inside of this chart. There are 2 types: application (defalut type), library.
+
+![image](https://github.com/user-attachments/assets/5f9922b5-95ae-4f6c-8e42-0824904eac0e)
+
+![image](https://github.com/user-attachments/assets/bbb64671-8fe3-4d1e-9dd9-65c53017796f)
+
+### Helm Chart Structure
+It has a templates directory that has the template files that we just talk about. 
+
+![image](https://github.com/user-attachments/assets/f2f5c094-5930-410d-8521-07f3d7bf2cb3)
+
 ## Helm Releases
 
 ![image](https://github.com/user-attachments/assets/02fc60cd-b170-44aa-85c7-911e4b821249)

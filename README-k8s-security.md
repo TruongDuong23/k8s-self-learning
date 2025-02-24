@@ -762,6 +762,37 @@ We can also do this with egress
 ![image](https://github.com/user-attachments/assets/44923a85-d099-40d7-9168-1355401c5d66)
 
 
+## Custom Resource Definition (CRD)
+The controller is a process that runs in the background and its job is to continuously monitor the status of resources that it's supposed to manage. When have any changes, it makes the necessary changes on the cluster to match what we have done. 
+
+![image](https://github.com/user-attachments/assets/ac502bc6-fad2-43ae-b38d-8d3763cc3470)
+
+Here is how to looks in code.
+
+![image](https://github.com/user-attachments/assets/f011accb-2bb5-4eb5-bbce-d86f3ebb7911)
+
+Example
+
+![image](https://github.com/user-attachments/assets/e3d68e71-3990-4df4-a2f5-527276a60c54)
+
+Now let's see how we are going to achieve this.
+
+![image](https://github.com/user-attachments/assets/7a7c9e8d-a022-417b-8632-fbdedf1da334)
+
+If tried to create a flight ticket resource now on your Kubernets cluster, you'll see that is fails like above. Because you can't simply create any resource that you want without configuring it in the Kubernetes API. So we have to first define what that resource is that we want to create.
+
+So that we need a custom resource definition or CRD. 
+
+![image](https://github.com/user-attachments/assets/a6d51d36-a8a3-4bbc-a1bc-4a3051de27cc)
+
+![image](https://github.com/user-attachments/assets/ada25a10-e40c-496d-825c-1ab56eb58ad0)
+
+
+## Custom Controller ( https://github.com/kubernetes/sample-controller )
+
+![image](https://github.com/user-attachments/assets/1b727bfb-4a3e-4398-bf82-bcff07b35157)
+
+
 
 
 

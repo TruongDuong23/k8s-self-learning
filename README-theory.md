@@ -452,6 +452,38 @@ kubectl apply -f pods105.yaml
 ![image](https://github.com/user-attachments/assets/cad66b70-d725-41f5-8b24-5362823aa1ef)
 
 
+# Helm Basics
+
+![image](https://github.com/user-attachments/assets/b855d451-89f8-4adf-84ba-6f714243c532)
+
+We need to apply kubectl apply on every YAML file. We can just write all object declarations ina single YAML file and be done with it.
+
+![image](https://github.com/user-attachments/assets/00c65686-89ad-47f8-b711-63ec21e153f8)
+
+## Helm Components
+
+![image](https://github.com/user-attachments/assets/2f4c2f93-14ce-4b5a-8067-fbeb1aa134e1)
+
+The releases are installed, the charts used, revision states and so on, Helm will need a place to savve this data. This data is known as metadata. If another person would need to work with our releases thorugh Helm, they would need a copy of this data. So instead, Helm does the smart thing and save this metadata directly in our k8s cluster as k8s secret. This way, the data survives and everyone from our team can access it, so they can do Helm upgrades or whatever it is that they want to do. So Helm will always know about everything it did.
+
+## Helm Charts
+
+![image](https://github.com/user-attachments/assets/d25176ee-32da-4692-ab6c-7e85bba695be)
+
+![image](https://github.com/user-attachments/assets/87f6f50e-fd6d-4f94-af69-c6ff5f47f9c6)
+
+## Helm Releases
+
+![image](https://github.com/user-attachments/assets/02fc60cd-b170-44aa-85c7-911e4b821249)
+
+## Helm Repositories
+
+![image](https://github.com/user-attachments/assets/7df3f480-f306-4127-81d5-70ac78ff436b)
+
+![image](https://github.com/user-attachments/assets/75294413-ab99-466a-be2a-384eb3a0378b)
+
+
+
 
 
 

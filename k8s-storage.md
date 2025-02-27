@@ -98,6 +98,69 @@ For example, to configure an AWS elastic block store volume as the storage optio
 
 ### Persistent Volumes
 
+Now, when you have a large environment with a lot of users deploying a lot of pods, the users would have to configure storage every time for each pod. Whatever storage solution is used, the users who deploys the pods would have to configure that on all pod definition files in his environment. Every time there are changes to be made the user would have to make them on all of his pods.
+
+Instead, you would like to manage storage more centrally. You would like it to be configured in a way that an administrator can create a large pool of storage and then have users carve out pieces from it as required. That is where persistent volumes can help us.
+
+![image](https://github.com/user-attachments/assets/08e06777-3200-4cad-8b6c-1b2e68834550)
+
+A persistent volume is a cluster-wide pool of storage volumes configured by an administrator to be used by users deploying applications on the cluster. The users can now select storage from this pool using persistent volume claims.
+
+![image](https://github.com/user-attachments/assets/d8264a3d-c311-4752-b551-ab09e78fcab3)
+
+- **accessModes**
+
+![image](https://github.com/user-attachments/assets/cd9bf5bb-c8c5-47e2-b2cc-86d5dec37b46)
+
+### Persistent Volumes Claims
+Persistent Volumes and Persistent Volume Claims are two separate objects in the Kubernetes name space.
+
+An administrator creates a set of persistent volumes, and a user creates persistent volume claims to use the storage. 
+
+![image](https://github.com/user-attachments/assets/74d37875-ecf1-4c16-a2cc-65f57e196b3a)
+
+#### Binding
+Once the persistent volume claims are created, Kubernetes binds the persistent volumes to claims based on the request and properties set on the volume. Every Persistent Volume Claim is bound to a single Persistent Volume. During the binding process, Kubernetes tries to find a Persistent Volume that has sufficient capacity, as requested by the claim. And any other request properties such as, access modes, volume modes, storage class, et cetera.
+
+![image](https://github.com/user-attachments/assets/d67602de-6d67-4bed-a8a7-a86ca7f89bc8)
+
+However, if there are multiple possible matches for a single claim, and you would like to specifically use a particular volume, you could still use labels and selectors to bind to the right volumes. Finally, note that a smaller claim may get bound to a larger volume if all the other criteria matches, and there are no better options.
+
+![image](https://github.com/user-attachments/assets/acffb8e5-9031-4240-b0db-7819033426ce)
+
+![image](https://github.com/user-attachments/assets/0c134b2b-c3bc-4d57-9906-6174e994db4b)
+
+There is a one to one relationship between claims and volumes, so no other claims can utilize the remaining capacity in the volume. If there are no volumes available, the persistent volume claim will remain in a pending state until newer volumes are made available to the cluster. Once newer volumes are available, the claim would automatically be bound to the newly available volume.
+
+![image](https://github.com/user-attachments/assets/1ac5132b-21c1-4305-9474-72770e37d3cc)
+
+Let's now create a persistent volume claim.
+
+![image](https://github.com/user-attachments/assets/49131359-a5df-4f95-a4dd-08f8b1157c26)
+
+When the claim is created, Kubernetes looks at the volume created previously. The access modes match. The capacity requested is 500 megabytes, but the volume is configured with one GB of storage. Since there are no other volumes available, the Persistent Volume Claim is bound to the Persistent Volume.
+
+![image](https://github.com/user-attachments/assets/3a4c5176-6271-49d8-bfe6-0d253654d6cc)
+
+#### View PVCs
+When we run the get volumes command, again, we see the claim is bound to the Persistent Volume we created.
+
+![image](https://github.com/user-attachments/assets/672b6f54-169a-4f9a-b062-985e44b5bbe4)
+
+#### Delete PVCs
+To delete a PVC, run the cube control, delete persistent volume claim command. But what happens to the underlying persistent volume when the claim is deleted? You can choose what is to happen to the volume. By default, it is set to retain. Meaning the persistent volume will remain until it is manually deleted by the administrator. It is not available for reuse by any other claims. 
+
+![image](https://github.com/user-attachments/assets/cff841a0-5a5e-4ba0-a943-7b01673583d1)
+
+Or, it can be deleted automatically. This way, as soon as the claim is deleted, the volume will be deleted as well. Thus, freeing up storage on the end storage device. 
+
+![image](https://github.com/user-attachments/assets/c30818e9-643d-4c09-b092-b34148bf5384)
+
+Or, a third option is to recycle. In this case, the data in the data volume will be scrubbed before making it available to other claims.
+
+![image](https://github.com/user-attachments/assets/9076b075-45bd-46d0-b957-21691fbc3afc)
+
+
 
 
 

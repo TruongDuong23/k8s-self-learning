@@ -55,10 +55,54 @@ So the new resize policy options allow you to specify a restart policy for each 
 In this example, we have defined that a change in CPU resource will not require the pod to be restarted, and a change in memory will require a restart of the pod. And next, we make a change to a resource such as updating the CPU to one. And you can see that the pod does not need to be killed. Instead, it can simply be updated with the new resources and so it can just increase in size. So that explains how we can resize a CPU or a memory resource assigned to a container without really restarting it.
 
 ### Limitations
+- Only CPU and memory resources can be changed.
+- Pod QoS Class can not change.
+- Init containers and Ephemeral Containers can not be resized.
+- Resource requests and limits can not be removed once set.
+- A containers's memory limit may not be reduced below its usage. If a request puts a container in this state, the resize status will remain in InProgress untill the desired memory limit becomes feasible.
+- Windows pods can not be resized.
 
-![image](https://github.com/user-attachments/assets/0fe0d775-b410-4b77-9238-85705576aec1)
 
+## Vertical Pod Autoscaling (VPA)
 
+![image](https://github.com/user-attachments/assets/49d85421-971f-4ce4-a6df-de3f0dcf2a59)
+
+So, similar to the Horizontal Pod Autoscaler, the Vertical Pod Autoscaler will continuously monitors the metrics and then it automatically increases or decreases the resources assigned to the pods in a deployment and thus, balances the workload.
+
+![image](https://github.com/user-attachments/assets/a903fedd-bafc-4e6e-92f2-4178ae6e7eb3)
+
+So unlike the Horizontal Pod Autoscaler, the Vertical Pod Autoscalers do not come built in. As such, we must deploy it.
+
+![image](https://github.com/user-attachments/assets/c91ecd9f-552c-479c-a0b9-b49f8b6bbd80)
+
+So, we first apply the Vertical Pod Autoscaler definition file available in the GitHub repo.
+
+![image](https://github.com/user-attachments/assets/ffe42be0-d9b8-49ec-8a99-17eda660e4db)
+
+And then, when we run the kubectl get pods command in the kube-system namespace and search for vpa, we will be able to see that there are multiple components deployed. So there is the admission-controller, recommender, and the updater service which should be running.
+
+The VPA deployment consists of multiple components:
+- VPA Admission Controller: intervenes the pod creation process and uses the recommendations from the Recommender again to then mutate the pod spec to apply the recommended CPU and memory values at startup. And this ensures that the newly created pods start with the correct resource requests.
+- VPA Updater: detects pods that are running with suboptimal resources and evicts them when an update is needed. So, it gets the information from the Recommender and monitors the pod. And if a pod needs to be updated, it evicts them. So, that means it just terminates the pod.
+- VPA Recommender: responsible for continuously monitoring resource usage from the Kubernetes metrics API and collects historical and live usage data for pods, and then provides recommendations on optimal CPU and memory values. And the Recommender itself does not modify the pod directly, or it only suggests changes.
+
+![image](https://github.com/user-attachments/assets/3d3e944e-056c-4c9d-a6ba-d47b52969819)
+
+So basically, the VPA Recommender collects information, the Updater monitors or gets the information from the Recommender, compares that to the actual pod, and if the pod is beyond the threshold, it kills the pod. And whether it kills or not, that depends on the policy that we will talk about in a bit. But ideally, it would kill the pod, and then the Admission Controller intervenes because when a pod is killed, it's automatically... The deployment will automatically recreate the pod. And when it does that, the Admission Controller intervenes and updates the resources so that the pod now comes up with the new size.
+
+![image](https://github.com/user-attachments/assets/5a393e87-e19d-41a9-a42a-35c59a52fdc7)
+
+There are four modes that VPA operates in.
+
+![image](https://github.com/user-attachments/assets/355f9e13-ba35-4ace-9680-315d41558c8f)
+
+Now, VPA will monitor resource usage and suggest adjustments, so we can check the recommendations with the command kubectl describe vpa followed by the name of the VPA.
+
+![image](https://github.com/user-attachments/assets/e73045a1-b450-4913-93ec-37f2452dfe63)
+
+### Key Differences
+
+![image](https://github.com/user-attachments/assets/949fe77e-c59f-43ae-87b4-11f68e098369)
 
 
 

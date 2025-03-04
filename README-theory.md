@@ -452,57 +452,6 @@ kubectl apply -f pods105.yaml
 ![image](https://github.com/user-attachments/assets/cad66b70-d725-41f5-8b24-5362823aa1ef)
 
 
-# Helm Basics
-
-![image](https://github.com/user-attachments/assets/b855d451-89f8-4adf-84ba-6f714243c532)
-
-We need to apply kubectl apply on every YAML file. We can just write all object declarations ina single YAML file and be done with it.
-
-![image](https://github.com/user-attachments/assets/00c65686-89ad-47f8-b711-63ec21e153f8)
-
-## Helm Components
-
-![image](https://github.com/user-attachments/assets/2f4c2f93-14ce-4b5a-8067-fbeb1aa134e1)
-
-The releases are installed, the charts used, revision states and so on, Helm will need a place to savve this data. This data is known as metadata. If another person would need to work with our releases thorugh Helm, they would need a copy of this data. So instead, Helm does the smart thing and save this metadata directly in our k8s cluster as k8s secret. This way, the data survives and everyone from our team can access it, so they can do Helm upgrades or whatever it is that they want to do. So Helm will always know about everything it did.
-
-## Helm Charts
-
-![image](https://github.com/user-attachments/assets/d25176ee-32da-4692-ab6c-7e85bba695be)
-
-![image](https://github.com/user-attachments/assets/87f6f50e-fd6d-4f94-af69-c6ff5f47f9c6)
-
-As far as the human operators are concerned, charts are just a bunch of text files. Each specific file named in a sepcific way has a well-defined purpose. 
-
-![image](https://github.com/user-attachments/assets/94da35f5-0533-4cab-a571-fb45f8d715df)
-
-Example chart.yaml
-
-![image](https://github.com/user-attachments/assets/56c537a7-7c70-4424-866d-9638b58b4d6d)
-
-![image](https://github.com/user-attachments/assets/7b9614b2-7db9-435d-b349-d3421dcb0b06)
-
-The app version is a version of the application that is inside of this chart. There are 2 types: application (defalut type), library.
-
-![image](https://github.com/user-attachments/assets/5f9922b5-95ae-4f6c-8e42-0824904eac0e)
-
-![image](https://github.com/user-attachments/assets/bbb64671-8fe3-4d1e-9dd9-65c53017796f)
-
-### Helm Chart Structure
-It has a templates directory that has the template files that we just talk about. 
-
-![image](https://github.com/user-attachments/assets/f2f5c094-5930-410d-8521-07f3d7bf2cb3)
-
-## Helm Releases
-
-![image](https://github.com/user-attachments/assets/02fc60cd-b170-44aa-85c7-911e4b821249)
-
-## Helm Repositories
-
-![image](https://github.com/user-attachments/assets/7df3f480-f306-4127-81d5-70ac78ff436b)
-
-![image](https://github.com/user-attachments/assets/75294413-ab99-466a-be2a-384eb3a0378b)
-
 
 
 

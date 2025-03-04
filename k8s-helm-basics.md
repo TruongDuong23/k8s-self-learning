@@ -207,6 +207,89 @@ Now if we want to, we can actually combine the new image and new tag properties 
 
 ![image](https://github.com/user-attachments/assets/c77b590f-9b5b-4cfa-9f8d-15c46f300b68)
 
+## Patches Intro
+
+![image](https://github.com/user-attachments/assets/957652e9-b837-4773-857c-c2e89bbb89cd)
+
+So basically, if you want to apply a configuration across the board, like adding a label or assigning a namespace to all of your Kubernetes objects, you're gonna use a common transformer. However, if you wanna apply or change something on one specific object or just a couple of objects, you would use a kustomize patch. So things like updating the number of replicas in a deployment, you would use a kustomize patch to match a specific object and then change that value.
+
+ ![image](https://github.com/user-attachments/assets/bc6dada9-f976-4922-b4db-21e79a548459)
+
+In this case, I'm matching on a kind of deployment. So it's going to look through all of my Kubernetes configs and it's going to match on only things that are of type deployment. And then I'm going to match on a deployment with a specific name of api-deployment. And that's going to match this exact Kubernetes object. Then we have to specify patch, and then we do this | and then a -. So you have to add that, and this is for what is referred to as an inline patch.
+
+![image](https://github.com/user-attachments/assets/6ae9a71d-f717-498d-8e0c-fcf30cebf65d)
+
+Now look at one more example
+
+![image](https://github.com/user-attachments/assets/c92ac052-d10d-4e43-9879-f412160bfaf0)
+
+In kustomize, there's actually two different ways to define a patch. So till now, we've only been working with what's referred to as a JSON 6902 patch. And so a JSON 6902 patch has two things that you have to provide, the Target, which is going to tell kustomize what Kubernetes object do we want to patch, and then we have to provide the patch details.
+
+But I wanted to go over the second way to define a patch, and that's called a **strategic merge patch**.
+
+I basically just copied the original API deployment file and I just pasted it in there, and then I deleted all the stuff I don't wanna change. And so this is one of the perks of using a strategic merge patches that it's just using regular Kubernetes configs. And then what it's going to do is it's going to take this new config and it's going to merge it with the old config, and it's going to figure out exactly what's changed and it's going to update those properties.
+
+![image](https://github.com/user-attachments/assets/71d07407-b0bc-429a-8eaa-86ae6b371bdb)
+
+## Different Types of Patches
+There are 2 different ways you can define a patch
+- Json 6902 patch Inline vs Separate File
+
+![image](https://github.com/user-attachments/assets/f8b38611-35a9-4911-b707-db096ec3b664)
+
+- Strategic merge patch Inline vs Separate File
+
+![image](https://github.com/user-attachments/assets/8ccd4917-4448-42a5-801c-2ab3d904a0f8)
+
+## Patches Dictionary
+
+![image](https://github.com/user-attachments/assets/8e882608-32f0-4254-b464-13e5ab9b24d5)
+
+Replace Dictionary Strategic Merge Patch
+
+![image](https://github.com/user-attachments/assets/bc41f741-39ad-4f38-8679-ff528144bb5a)
+
+So we saw how we can replace or modify a key and a dictionary using a JSON 6902 patch. Add Dictionary
+
+![image](https://github.com/user-attachments/assets/7ce90654-a771-45d2-ba7b-5b650f629291)
+
+The same as using Strategic Merge Patch
+
+![image](https://github.com/user-attachments/assets/a08babbc-4982-41d8-9d40-29f608d82d6b)
+
+The same with remove. Using Json6902
+
+![image](https://github.com/user-attachments/assets/31d1f259-2af2-4a1b-bd44-0617d771859e)
+
+Using Strategic Merge Patch
+
+![image](https://github.com/user-attachments/assets/e34014eb-b866-45f9-bacd-c6fe34945940)
+
+## Patches list
+Let's now take a look at how we can perform those operations on a list.
+
+We have a zero. So what does this zero mean? 
+
+Well, the number at the end of the path represents the index of the container you wanna change. So remember, this is a list, so you can have more than one container, and the index is going to represent which item in that list you wanna update.
+
+![image](https://github.com/user-attachments/assets/bc261fd9-4d8a-4aa9-a924-ebc8a6935619)
+
+![image](https://github.com/user-attachments/assets/eaed48ae-8ce3-416f-8d31-6f50da30d2c1)
+
+**ADD List**
+
+![image](https://github.com/user-attachments/assets/93c4e380-6310-4aa8-9e76-cda7ffc8c592)
+
+![image](https://github.com/user-attachments/assets/df99d46c-3e60-43df-8fe3-591bd64351df)
+
+**DELETE List**
+
+![image](https://github.com/user-attachments/assets/a2e98c63-1a8c-4d66-9a4e-ad253e58606b)
+
+![image](https://github.com/user-attachments/assets/45d92371-3eba-42cd-a078-6a0821ded32b)
+
+
+
 
 
 

@@ -167,8 +167,45 @@ I think we have a better way of handling this using customize. So what we can ac
 
 ![image](https://github.com/user-attachments/assets/a349a140-fdf3-4d5f-ab64-21a59198e37a)
 
+## Common Transfomers
 
+![image](https://github.com/user-attachments/assets/d83e99fc-bf30-45e6-9d46-c3e0b9fc8231)
 
+Well, let's say that we want to specifically add a label in this case, so something like org KodeKloud, or maybe we wanna go into all of our Kubernetes objects and add a specific prefix or suffix to the name. So maybe we wanna append the word **-dev** to the end of our name, and we'll do the same thing across all of our Kubernetes configs.
+
+![image](https://github.com/user-attachments/assets/7d6f803e-23b2-4cc7-91f7-a1cd34b9408d)
+
+Now, we can go into each one of our yaml files and add these in. But keep in mind, in a production environment, you're going to have significantly more than just two yaml files. And so doing this by hand is not a scalable solution, and it's gonna be very time-consuming and it's going to lead to a lot of errors. And so this is why we have these common transformations in Kustomize. What they do is they allow us to make these common configuration changes across all of our Kubernetes resources. So let's go over some of the common transformations that we can apply.
+
+![image](https://github.com/user-attachments/assets/ad6643fe-4057-4b65-b5f9-3d65434c23ae)
+
+Well, we would go into our Kustomization.yaml file, and just add the commonLabel property and then specify the labels that you wanna add, and that's gonna go ahead and add this to all of your Kubernetes resources. Or more specifically, it's going to add it to all of the resources that are being imported by this specific Kustomization.yaml file.
+
+![image](https://github.com/user-attachments/assets/891693d8-25ea-46de-a85c-4b3578986a3f)
+
+So the Namespace Transformer is just going to put all of your Kubernetes resources under a specific namespace.
+
+![image](https://github.com/user-attachments/assets/c701802f-7e8b-4e21-8978-c0ea9b3ee4cc)
+
+For the Prefix/Suffic Transformer
+
+![image](https://github.com/user-attachments/assets/f2d4a576-c725-45e7-b5f0-284302d7e7a2)
+
+And for the last common transformation, we have the annotation transformation.
+
+![image](https://github.com/user-attachments/assets/7c42a629-c276-4731-80a9-abb266751e51)
+
+## Image Transformers
+
+![image](https://github.com/user-attachments/assets/43324be7-8d07-4de2-918e-c372d3ab257c)
+
+So now we know how to change the image using customize. 
+
+![image](https://github.com/user-attachments/assets/2005e0ae-a603-4635-8c15-df2c898d28d3)
+
+Now if we want to, we can actually combine the new image and new tag properties together so that we can modify not only the image, but also the tag.
+
+![image](https://github.com/user-attachments/assets/c77b590f-9b5b-4cfa-9f8d-15c46f300b68)
 
 
 

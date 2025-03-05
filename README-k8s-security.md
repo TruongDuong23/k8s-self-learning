@@ -793,6 +793,74 @@ So that we need a custom resource definition or CRD.
 ![image](https://github.com/user-attachments/assets/1b727bfb-4a3e-4398-bf82-bcff07b35157)
 
 
+## Admission Controllers
+### Authentication
+
+![image](https://github.com/user-attachments/assets/e8f4daef-3eb7-425b-998f-55d54ccae180)
+
+### Authorization
+
+![image](https://github.com/user-attachments/assets/10999c85-b8d0-44ce-921c-667609fd05bc)
+
+### Authorization - RBAC
+
+![image](https://github.com/user-attachments/assets/66fe9dfc-e8fe-4d6c-b9a5-ca03da88a04c)
+
+![image](https://github.com/user-attachments/assets/1bf10548-4978-461b-938f-685f0b9abd78)
+
+### Admission Controllers
+Admission controllers help us implement better security measures to enforce how a cluster is used. Apart from simply validating configuration, admission controllers can do a lot more suggest change the request itself or perform additional operations before the pod gets created.
+
+![image](https://github.com/user-attachments/assets/fd2822bf-48b0-4dac-9ec8-8ad90c780db2)
+
+There are a number of admission controllers that come pre-built with Kubernetes such as:
+- Always pull images that ensures that every time a pod is created, the images are always pulled.
+- The default storage class admission controller that observes the creation of PVCs and automatically adds a default storage class to them, if one is not specified, the event rate limit admission controller can help set.
+- The event rate limit admission controller can help set a limit on the request with the API server can handle at a time to prevent the API server from flooding with requests.
+- The namespace exists, admission controller rejects requests to namespace that do not exist.
+
+![image](https://github.com/user-attachments/assets/16f4611e-2a11-4ce9-8fb9-5c28b891b75e)
+
+So let's take that as an example and look at it in a bit more detail. The namespace exists admission controller. Say we want to create a pod in a namespace called Blue that doesn't exist. If I run this command, it would throw an error that says the namespace blue is not found. What's happening here is that my request gets authenticated, then authorized, and it then goes through the admission controllers. The namespace exists. Admission controller handles the request and checks if the blue namespace is available. If it is not, the request is rejected. The namespace exists is a built-in admission controller that is enabled by default.
+
+![image](https://github.com/user-attachments/assets/0dd0cd67-08b6-4224-848e-3c11ae572ea4)
+
+There's another admission controller that is not enabled by default, and that is called as the Namespace Auto Provision Admission Controller. This will automatically create the namespace if it does not exist.
+
+### View Enabled Admission Controllers
+First, to see a list of admission controllers enabled by default,
+
+![image](https://github.com/user-attachments/assets/a71a7fac-65ea-4375-924c-1a11c09c6049)
+
+Note that if you're running this in a Kubeadm based setup, then you must run this command within the Kube API server Control plane pod using the Kubectl exec command first like this.
+
+![image](https://github.com/user-attachments/assets/017c14c9-34b7-47d9-87c7-ae5e7ee8ba17)
+
+```Bash
+kubectl exec -it kube-apiserver-controlplane -n kube-system -- kube-apiserver -h | grep 'enable-admission-plugins'
+```
+
+### Enable Admission Controllers
+
+![image](https://github.com/user-attachments/assets/46150c89-5434-4ced-999f-a19729a6a673)
+
+To add an admission controller, update the enable admission plugins flag on the Kube API server service
+
+![image](https://github.com/user-attachments/assets/8d3c0aba-d67d-4f1f-a88a-cc8862b4355e)
+
+Similarly to disable admission controller plugins, you could use the disable admission plugins flag.
+
+![image](https://github.com/user-attachments/assets/dc11f43c-0aa7-4847-baca-681399110365)
+
+Once updated, the next time we run the command to provision a pod in a namespace that does not exist yet. The request goes through authentication, then authorization, and then the Namespace Auto Provision Controller, at which point it realizes that the namespace doesn't exist. So it creates the namespace automatically and the request goes through successfully to create the pod.
+
+![image](https://github.com/user-attachments/assets/c591069a-9940-4015-96d7-48779fb03566)
+
+Note that the Namespace Auto Provision and the Namespace Exists at admission controllers are deprecated and is now replaced by the Namespace Lifecycle Admission Controller. The namespace lifecycle admission controller will make sure that requests to a non-existent namespace is rejected and that the default namespace, such as default Kube system and Kube public cannot be deleted.
+
+![image](https://github.com/user-attachments/assets/c28768c5-7bd7-4de0-b4b8-d0e367976b53)
+
+
 
 
 

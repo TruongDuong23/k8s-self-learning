@@ -288,15 +288,72 @@ Well, the number at the end of the path represents the index of the container yo
 
 ![image](https://github.com/user-attachments/assets/45d92371-3eba-42cd-a078-6a0821ded32b)
 
+## Overlays
 
+![image](https://github.com/user-attachments/assets/9ce2a4c0-0718-40e5-b6cb-e38e30f3c0be)
 
+So this is going to be where all of your shared configuration, so all of your Kubernetes configs that are gonna be shared across all of your environments or all of your default configs are going to reside. So your base config is going to have all of these shared and default configurations. And then what we're gonna do is on a per-environment basis, we're gonna define a overlay folder for each environment. And here we get to specify all of the environment specific configs so that we can take the base configs and then modify it to our liking for that specific environment. And so that's why we have a folder for dev, and a folder for staging, and a folder for production.
 
+- That's it, so your dev folder is going to have a certain number of patches that will change things to match what the dev should have.
+- Staging folder is gonna do the same thing. They're gonna have a bunch of patches for the staging environment, and the same thing goes for production.
 
+![image](https://github.com/user-attachments/assets/4eb7a0b6-1890-4edf-a04e-05fc568b3dbe)
 
+if you see two dots and a slash, that means go up a directory. So we see **../**, so that means we go from the dev folder to the overlays folder, and then we have another **../**, so that means we go from the overlays folder to the k8s folder, and then we go into the base directory. Once that's defined, Kustomize will look for the kustomization.yaml file in the base directory to know all the resources it should be importing.
 
+But in one of these environment folders, in your overlay folders, you can have new configs that weren't defined in your base folder.
 
+![image](https://github.com/user-attachments/assets/0b2228b2-7462-4a7a-a0a3-207bba6468d8)
 
+So in this example, I have a grafana-depl.yaml, and you'll notice that doesn't exist in the base folder. So this means that in my production environment, I'm going to add a Grafana deployment that isn't available in any of my other environments. And so I just wanted to highlight the fact that in these environment-specific folders, you can add as many brand new resources as you want. You don't have to just modify preexisting ones, you can use new ones. And so the way that this would look like in your kustomization.yaml file is, under the resources section, we just import it like a regular file. So we have our bases, we have our patches, and then we import our resources that are in our current folder.
 
+![image](https://github.com/user-attachments/assets/bb2a3c37-a0f8-45f7-9efa-8a72f4af1071)
+
+In fact, kustomize gives you a lot of flexibility in how you wanna structure your Kubernetes configs. So you can break it out into subfolders. So your base folder can be broken out into, you know, extra subdirectories based off of features like we've done before, and you could break it out however you want to. Don't think that you just have to jam everything under the base directory.
+
+If you wanna break it out into features as well, you can do that as well. And remember, these subdirectories don't have to match up with what the base directory is. They can be completely separate. They can follow their own patterns. It's completely up to you, just make sure that you have the resources being imported properly into the proper kustomization.yaml files.
+
+## Components
+
+![image](https://github.com/user-attachments/assets/5e6e8bc4-369d-4fc0-83ac-da7362a3d0bb)
+
+We usually try to avoid copying and pasting things like that. 'Cause a lot of times it leads to some config drift. If you make changes in one, you forget to make changes in the other. So components are just reusable blocks of Kubernetes configs, that's all it is. Don't complicate it, it's just all of the resources for a specific feature, all of the patches, all of the config maps, secrets, and any other Kubernetes related configs associated with the feature.
+
+![image](https://github.com/user-attachments/assets/b873b87e-4e3a-443c-a2ee-21ca88dd301c)
+
+So we're writing out all of our Kubernetes configs for our caching functionality, and we're trying to figure out where exactly do we put it in our folder structure. The first thing you're thinking is, we put it in our base configuration directory. And the problem with doing that is, all three overlays will get the configuration, but remember, only self-hosted and premium should get the caching configuration, we don't want development to get it. So putting it in the base folder is not an option.
+
+So what else can we do? Well, we can copy the caching configuration in both of the premium and self-hosted overlays, and that would work just fine. However, if you make changes in one of the folders, you'd have to remember to make changes in the other one. And let's say we over time decide to add a few more variations to how we can deploy our application. We would have to remember to copy it into all of those. So like most other things like developing any applications, you wanna avoid copying and pasting whenever you can.
+
+So we've got the exact same folder structure with our three overlays and our base configuration, but now we're gonna create an extra folder and we're gonna store all of our components here.
+
+![image](https://github.com/user-attachments/assets/8cc2d719-1bc2-42b1-8582-35d22dcc7178)
+
+They were kind of created so that we could have a reusable block of code that we can apply in several different overlays. So we could take our caching configuration, all the Kubernetes config for that, and create a component, a customized component, and then we can just import that component into all of the different overlays that should be using it.
+
+So inside the caching folder, we're gonna have all of the Kubernetes configs that are associated with the caching feature. So like I said, that's going to be probably like a Redis instance with all of the configurations and secrets for the authentication side of our Redis database, as well as anything else that we need for our Redis database. As well as, we're gonna have a folder for our external database feature. And that's going to contain all of the configs that we need to implement that specific feature. So they're all isolated into their own folder. Then what we can do is, all of the overlays that need the caching functionality, they can just import that component. So they just have one line in their configs that say, "Hey, I want to import caching." And then for all of the overlays that need the database, they can just import the database component.
+
+And all of the logic for the external database functionality sits in the database folder inside the components directory. And that way we get to write it only once and then we could import it into as many overlays as we want.
+
+I'm just creating all of the resources I need to get the external database functionality to work.
+
+![image](https://github.com/user-attachments/assets/49ff223b-3950-48eb-9ede-af0224dfb6a5)
+
+Now, if we take a look at the kustomization.yaml file, the first thing that you'll notice is the apiVersion and the kind are different. Because this is a component, we have to change the version to the one listed there, and the kind to be component, just something to keep in mind.
+
+![image](https://github.com/user-attachments/assets/cc9aa1b1-4786-4055-90e4-74280589d2cd)
+
+![image](https://github.com/user-attachments/assets/231fe54a-81e7-4b75-9940-6611277b0fb9)
+
+I also figured that since we have a database, we probably need to store a secret for the database
+
+So if we take a look at the deployment-patch.yaml file, you can see this is a strategic merge patch. And we're going to update the API-deployment in our base configuration, and we're gonna add a brand new environment variable, and that's going to be the database password.
+
+![image](https://github.com/user-attachments/assets/4f516c80-cd8b-418b-8cba-2b333b285d44)
+
+So we have to import the components that we created.
+
+![image](https://github.com/user-attachments/assets/4968649d-0698-4ae5-acd2-48e1448af520)
 
 
 

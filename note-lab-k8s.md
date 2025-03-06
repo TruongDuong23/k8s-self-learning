@@ -78,3 +78,51 @@ When this file is updated, the ETCD pod is automatically re-created as this is a
 > Note3: This is the simplest way to make sure that ETCD uses the restored data after the ETCD pod is recreated. You **don't** have to change anything else.
   
   **If** you do change **--data-dir** to **/var/lib/etcd-from-backup** in the YAML file, make sure that the **volumeMounts** for **etcd-data** is updated as well, with the mountPath pointing to /var/lib/etcd-from-backup (**THIS COMPLETE STEP IS OPTIONAL AND NEED NOT BE DONE FOR COMPLETING THE RESTORE**)
+
+
+
+---------------------------------------------------------------------------------------------
+
+If you have this case:
+
+![image](https://github.com/user-attachments/assets/587c9807-89f7-4a36-8154-c38f8f619611)
+
+It looks like you're encountering a permissions issue with the **kubernetes-admin** user. This error typically means that the user does not have the necessary permissions to list services in the default namespace.
+
+To resolve this, you might need to check the role bindings and ensure that the **kubernetes-admin** user has the appropriate permissions. Here’s a general approach to troubleshoot and fix this:
+
+1. Check current context:
+   
+   Ensure that your kubectl context is set correctly. You can verify this with:
+
+   ```Bash
+      kubectl config current-context
+   ```
+   
+2. Inspect Role Bindings:
+   
+   Check the role bindings for the **kubernetes-admin** user:
+   
+   ```Bash
+      kubectl get rolebinding,clusterrolebinding -A | grep kubernetes-admin
+   ```
+
+3. Modify Permissions:
+
+   If the permissions are not set correctly, you may need to create or modify a **ClusterRoleBinding** to grant the necessary permissions. Here’s an example command to bind the **cluster-admin** role to the **kubernetes-admin** user:
+
+   ```Bash
+      kubectl create clusterrolebinding kubernetes-admin-binding --clusterrole=cluster-admin --user=kubernetes-admin
+   ```
+
+4. Verify Access:
+
+   After adjusting the permissions, try listing the services again:
+
+   ```Bash
+      kubectl get services
+   ```
+
+
+
+

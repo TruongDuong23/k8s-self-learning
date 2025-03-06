@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/13c61446-14c9-4673-9180-e54a9e2d8bd3)
 
 
 # 1. Get etcdctl utility if it's not already present.

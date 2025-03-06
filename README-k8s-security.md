@@ -860,6 +860,55 @@ Note that the Namespace Auto Provision and the Namespace Exists at admission con
 
 ![image](https://github.com/user-attachments/assets/c28768c5-7bd7-4de0-b4b8-d0e367976b53)
 
+## Validating and Mutating Admission Controllers
+### Validating Admission Controllers
+
+![image](https://github.com/user-attachments/assets/56e69d7a-a969-458d-83f2-a1200989742e)
+
+It can help validate if a namespace already exists and reject the request if it doesn't exist. This is known as a validating admission controller.
+
+### Mutating Admission Controllers
+
+![image](https://github.com/user-attachments/assets/9fb9b591-f62c-45ea-a4b5-940d8d26d904)
+
+It can change or mutate the object itself before it is created. 
+
+Say for example, the DefaultStorageClass Admission Controller will watch for a request to create a PVC and check if it has a storage class mentioned in it. If not, which is true in our case, it'll modify your request to add the DefaultStorageClass to your request. This could be whatever storage class is configured as the DefaultStorageClass in your cluster. So when the PVC is created and you inspect it, you'll see that a StorageClass default is added to it even though you hadn't specified it during the creation.
+
+Those are two types of admission controllers:
+- Mutating admission controllers are those that can change the request and validating admission controllers are those that can validate the request, and allow or deny it.
+- There may be admission controllers that can do both. That can mutate a request as well as validate a request.
+
+This is so that any change made by the mutating admission controller can be considered during the validation process.
+
+![image](https://github.com/user-attachments/assets/0fe85a63-a92a-4325-a0be-7fbae1ce93cc)
+
+Now, what if we want our own admission controller with our own mutations and validations that has our own logic? To support external admission controllers, there are two special admission controllers available: MutatingAdmissionWebhook and ValidatingAdmissionWebhook.
+
+![image](https://github.com/user-attachments/assets/e23b5756-8084-4024-b529-dc8732ed35d0)
+
+We can configure these webhooks to point to a server that's hosted either within the Kubernetes cluster or outside it, and our server will have our own admission webhook service running with our own code and logic. After a request goes through all the built-in admission controllers, it hits the webhook that's configured. And then once it hits the webhook, it makes a call to the admission webhook server by passing in an AdmissionReview object in a JSON format.
+
+On receiving the request, the admission webhook server responds with an AdmissionReview object with a result of whether the request is allowed or not. If the allowed field in the response is set to true, then the request is allowed. And if it's set to fault, it is rejected.
+
+### Deploy Webhook Server
+Example deploy Webhooks by Python
+
+![image](https://github.com/user-attachments/assets/9c2c159d-9c1e-40b7-aae8-a94b057c0776)
+
+![image](https://github.com/user-attachments/assets/b7d2f9fc-84b2-44cc-ad3c-87b88bc66e71)
+
+Once we have developed our own webhook server, the next step is to host it. So, we either run it as a server somewhere, or containerize it and deploy it within Kubernetes cluster itself as a deployment. If deployed as a deployment in a Kubernetes cluster, then it needs a service for it to be accessed. So, we have a service named webhook-service as well. The next step is to configure our cluster to reach out to the service and validate or mutate the requests.
+
+![image](https://github.com/user-attachments/assets/f6ddaafd-140e-419e-8e06-ffbaee4b9a32)
+
+### Configuring Admission Webhook
+
+![image](https://github.com/user-attachments/assets/58836cba-240a-4ede-97d4-bbdd7b6ec8b0)
+
+
+
+
 
 
 

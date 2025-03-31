@@ -125,4 +125,27 @@ To resolve this, you might need to check the role bindings and ensure that the *
 
 
 
+---------------------------------------------------------------------------------------------------------
+
+**etcd-controlplane** pod is running in **kube-system** environment, take backup and store it in **/opt/cluster_backup.db** file, and also store backup console output store it in **backup.txt**
+
+Answer:
+```Bash
+etcdctl snapshot save /opt/cluster_backup.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key > backup.txt 2>&1
+```
+
+
+
+
+
+
+
+
+
+
+
 

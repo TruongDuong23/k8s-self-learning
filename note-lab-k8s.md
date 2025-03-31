@@ -126,6 +126,7 @@ To resolve this, you might need to check the role bindings and ensure that the *
 
 
 ---------------------------------------------------------------------------------------------------------
+Question: Killercoda (etcd)
 
 **etcd-controlplane** pod is running in **kube-system** environment, take backup and store it in **/opt/cluster_backup.db** file, and also store backup console output store it in **backup.txt**
 

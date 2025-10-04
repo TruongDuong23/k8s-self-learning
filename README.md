@@ -1,4 +1,4 @@
-# k8s-self-learning:     * https://infotechys.com/install-a-kubernetes-cluster-on-rhel-9/
+# k8s-self-learning: 
 
 # Install a Kubernetes Cluster on RHEL 9
 
@@ -544,3 +544,7 @@ Consider your network setup, router capabilities, and security requirements when
 Congratulations! You’ve successfully set up a Kubernetes cluster on Red Hat Enterprise Linux 9 or CentOS 9. With your cluster up and running, you can now begin deploying and managing containerized applications with ease. Remember, Kubernetes is a powerful tool that can streamline your development and deployment workflows, so don’t hesitate to explore its full potential.
 In this guide, we covered the essential steps required to install Kubernetes on RHEL 9 | CentOS 9, but there’s still plenty more to learn. Keep experimenting, stay curious, and never stop exploring the fascinating world of Kubernetes. Happy clustering!
 Did you find this article useful? Your feedback is invaluable to us! Please feel free to share your thoughts in the comments section below.
+
+---
+
+[1] https://infotechys.com/install-a-kubernetes-cluster-on-rhel-9/

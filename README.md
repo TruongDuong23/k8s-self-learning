@@ -1,4 +1,3 @@
-# k8s-self-learning: 
 
 # Install a Kubernetes Cluster on RHEL 9
 
